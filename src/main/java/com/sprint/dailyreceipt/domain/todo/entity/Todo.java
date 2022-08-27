@@ -49,4 +49,13 @@ public class Todo extends BaseEntity {
         this.timer = timer;
         this.isDone = isDone;
     }
+
+    public Todo update(Todo updatedTodo) {
+        this.task = updatedTodo.getTask();
+        this.timer = updatedTodo.getTimer();
+        this.isDone = updatedTodo.isDone();
+        setUpdatedAt(updatedTodo.getUpdatedAt());
+
+        return this;
+    }
 }

@@ -21,4 +21,8 @@ public abstract class BaseEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
