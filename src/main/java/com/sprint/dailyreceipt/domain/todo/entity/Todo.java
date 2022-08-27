@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -39,7 +40,9 @@ public class Todo extends BaseEntity {
     private boolean isDone;
 
     @Builder
-    public Todo(Long id, Account account, String task, String timer, boolean isDone) {
+    public Todo(Long id, Account account, String task, String timer, boolean isDone, ZonedDateTime createdAt,
+                ZonedDateTime updatedAt) {
+        super(createdAt, updatedAt);
         this.id = id;
         this.account = account;
         this.task = task;
