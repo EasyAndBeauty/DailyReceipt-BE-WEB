@@ -1,7 +1,7 @@
 package com.sprint.dailyreceipt.domain.todo.entity;
 
 import com.sprint.dailyreceipt.domain.account.Account;
-import com.sprint.dailyreceipt.domain.common.BaseEntity;
+import com.sprint.dailyreceipt.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +38,7 @@ public class Todo extends BaseEntity {
     private String timer;
 
     private boolean isDone;
+
 
     @Builder
     public Todo(Long id, Account account, String task, String timer, boolean isDone, ZonedDateTime createdAt,

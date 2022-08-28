@@ -2,7 +2,7 @@ package com.sprint.dailyreceipt.web.oauth.kakao;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.sprint.dailyreceipt.domain.service.AccountService;
+import com.sprint.dailyreceipt.domain.account.service.AccountService;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoTokenResponse;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.sprint.dailyreceipt.global.ReceiptConstants.GRANT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.KAKAO_CONTENT_TYPE;
+import static com.sprint.dailyreceipt.global.ReceiptConstants.LOCAL_REDIRECT_URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class KakaoController {
         System.out.println("callBackUrl = " + callBackUrl);
 
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
-                                                                                      clientId, callBackUrl,
+                                                                                      clientId, LOCAL_REDIRECT_URI,
                                                                                       code, clientSecret);
 
         String result = kakaoClientForAccountInfo.accessToken(KAKAO_CONTENT_TYPE, "Bearer " + kakaoTokenResponse.getAccessToken());

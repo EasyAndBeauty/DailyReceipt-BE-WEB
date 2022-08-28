@@ -1,7 +1,7 @@
-package com.sprint.dailyreceipt.domain.service;
+package com.sprint.dailyreceipt.domain.account.service;
 
 import com.sprint.dailyreceipt.domain.account.Account;
-import com.sprint.dailyreceipt.domain.repository.AccountRepository;
+import com.sprint.dailyreceipt.domain.account.repository.AccountRepository;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

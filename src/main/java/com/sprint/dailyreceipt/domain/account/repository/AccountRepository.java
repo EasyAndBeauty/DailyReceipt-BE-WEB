@@ -1,4 +1,4 @@
-package com.sprint.dailyreceipt.domain.repository;
+package com.sprint.dailyreceipt.domain.account.repository;
 
 import com.sprint.dailyreceipt.domain.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;

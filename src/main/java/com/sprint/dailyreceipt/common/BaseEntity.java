@@ -1,4 +1,4 @@
-package com.sprint.dailyreceipt.domain.common;
+package com.sprint.dailyreceipt.common;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
