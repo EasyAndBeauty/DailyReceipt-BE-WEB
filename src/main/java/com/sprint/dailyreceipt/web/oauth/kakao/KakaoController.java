@@ -60,8 +60,10 @@ public class KakaoController {
 
         String id = element.getAsJsonObject().get("id").getAsString();
         String email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+        String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname")
+                                 .getAsString();
 
-        KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(id, email);
+        KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(id, email, nickname);
 
         accountService.signIn(kakaoUserInfo);
 

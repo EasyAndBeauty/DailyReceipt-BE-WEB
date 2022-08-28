@@ -25,7 +25,9 @@ public class AccountService {
         findAccount.ifPresentOrElse(account -> {
                                         log.info("signIn");
                                     }, () -> {
-                                        Account account = Account.of(kakaoUserInfo.getEmail(), kakaoUserInfo.getId());
+                                        Account account = Account.of(kakaoUserInfo.getEmail(),
+                                                                     kakaoUserInfo.getId(),
+                                                                     kakaoUserInfo.getNickname());
 
                                         accountRepository.save(account);
                                     }

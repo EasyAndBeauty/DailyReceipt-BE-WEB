@@ -26,6 +26,8 @@ public class Account {
 
     private String email;
 
+    private String nickname;
+
     @Column(name = "unique_id_by_social")
     private String uniqueIdBySocial;
 
@@ -36,13 +38,14 @@ public class Account {
         this.id = id;
     }
 
-    private Account(String email, String uniqueIdBySocial) {
+    private Account(String email, String uniqueIdBySocial, String nickname) {
         this.email = email;
         this.uniqueIdBySocial = uniqueIdBySocial;
+        this.nickname = nickname;
     }
 
-    public static Account of(String email, String uniqueIdBySocial) {
-        return new Account(email, uniqueIdBySocial);
+    public static Account of(String email, String uniqueIdBySocial, String nickname) {
+        return new Account(email, uniqueIdBySocial, nickname);
     }
 
     public void addTodo(Todo todo) {

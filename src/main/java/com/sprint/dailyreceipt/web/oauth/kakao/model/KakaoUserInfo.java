@@ -13,8 +13,11 @@ public class KakaoUserInfo {
 
     String email;
 
-    public KakaoUserInfo(String id, String email) {
+    String nickname;
+
+    public KakaoUserInfo(String id, String email, String nickname) {
         this.id = id;
         this.email = email;
+        this.nickname = nickname;
     }
 }
