@@ -19,7 +19,7 @@ spring:
 
 social:
   kakao:
-    client-id: ENC(YhRstpqSMrFjoMvKPaY2bYEB+wseFUvNH5J/Gqra8kyQ+BfdCAjvsk93C+7B5l6/)
+    client-id: ENC(8A6U6di5vT1N/u+nWYIWah6tGy0xDSdLJiB/vcLptoGKNdZiDmqxwM52a+CLneS4)
     client-secret: ENC(OsvS4WEFAAIJAjp2gWhnPs8cG1I6EOpudqdqmOYL/tlgWSMtY0qa8lIwWWb99vNz)
 
 private:
