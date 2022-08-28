@@ -39,6 +39,10 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+    
+      - name: create MySQL container
+        run: |
+          sudo docker run -d -p 3306:3306 --env MYSQL_DATABASE=receipt --env MYSQL_ROOT_PASSWORD=1234 mysql:8.0.28
 
       - name: cache
         uses: actions/cache@v2
