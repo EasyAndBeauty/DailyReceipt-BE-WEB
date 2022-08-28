@@ -6,6 +6,7 @@ import com.sprint.dailyreceipt.domain.account.service.AccountService;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoTokenResponse;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import static com.sprint.dailyreceipt.global.ReceiptConstants.LOCAL_REDIRECT_URI
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoController {
 
     private final KakaoClientForToken kakaoClientForToken;
@@ -44,6 +46,8 @@ public class KakaoController {
                                 .append("/kakao")
                                 .append("/callback")
                                 .toString();
+
+        log.info("callBackUrl = {}", callBackUrl);
 
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
                                                                                       clientId, callBackUrl,
