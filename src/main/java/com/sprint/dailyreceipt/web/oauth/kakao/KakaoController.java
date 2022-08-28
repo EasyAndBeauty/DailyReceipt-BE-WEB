@@ -42,7 +42,7 @@ public class KakaoController {
         String callBackUrl = url.append(":8080")
                                 .append("/auth")
                                 .append("/kakao")
-                                .append("callback")
+                                .append("/callback")
                                 .toString();
 
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
