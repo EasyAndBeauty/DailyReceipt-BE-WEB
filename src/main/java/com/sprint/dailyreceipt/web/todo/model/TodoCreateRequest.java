@@ -1,4 +1,4 @@
-package com.sprint.dailyreceipt.web.model;
+package com.sprint.dailyreceipt.web.todo.model;
 
 import com.sprint.dailyreceipt.domain.todo.entity.Todo;
 import lombok.Getter;

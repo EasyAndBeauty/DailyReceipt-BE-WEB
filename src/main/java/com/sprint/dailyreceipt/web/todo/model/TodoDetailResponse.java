@@ -1,4 +1,4 @@
-package com.sprint.dailyreceipt.web.model;
+package com.sprint.dailyreceipt.web.todo.model;
 
 import lombok.Builder;
 import lombok.Getter;

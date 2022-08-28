@@ -1,7 +1,7 @@
-package com.sprint.dailyreceipt.web;
+package com.sprint.dailyreceipt.web.todo;
 
 import com.sprint.dailyreceipt.domain.todo.service.TodoService;
-import com.sprint.dailyreceipt.web.model.TodoCreateRequest;
+import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

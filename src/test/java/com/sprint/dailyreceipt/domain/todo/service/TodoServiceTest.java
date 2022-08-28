@@ -3,13 +3,12 @@ package com.sprint.dailyreceipt.domain.todo.service;
 import com.sprint.dailyreceipt.domain.account.Account;
 import com.sprint.dailyreceipt.domain.todo.entity.Todo;
 import com.sprint.dailyreceipt.domain.todo.repository.TodoRepository;
-import com.sprint.dailyreceipt.web.model.TodoCreateRequest;
+import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
