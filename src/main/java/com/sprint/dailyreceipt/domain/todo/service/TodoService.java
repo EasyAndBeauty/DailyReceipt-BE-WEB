@@ -87,6 +87,7 @@ public class TodoService {
                                                    .date(todo.getDate())
                                                    .isDone(todo.isDone())
                                                    .timer(todo.getTimer())
+                                                   .todoId(todo.getId())
                                                    .build(
                                                    ))
                     .collect(Collectors.toList());

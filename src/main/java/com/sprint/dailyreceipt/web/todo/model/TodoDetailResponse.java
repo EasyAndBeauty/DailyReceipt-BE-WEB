@@ -22,12 +22,15 @@ public class TodoDetailResponse {
 
     private String minute;
 
+    private long todoId;
+
     @Builder
-    public TodoDetailResponse(String task, String date, boolean isDone, String timer) {
+    public TodoDetailResponse(String task, String date, boolean isDone, String timer, long todoId) {
         this.task = task;
         this.date = date;
         this.isDone = isDone;
         this.hour = String.valueOf(Integer.parseInt(timer) / 60);
         this.minute = String.valueOf(Integer.parseInt(timer) % 60);
+        this.todoId = todoId;
     }
 }
