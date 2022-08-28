@@ -13,6 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,8 +32,12 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
     @DisplayName("POST /api/v1/todo : todo 생성이 정상적으로 수행될 경우, OK(200)이 반환된다")
     void testPostTodoStatusOK() throws Exception {
         ResponseEntity<Long> response = restTemplate.postForEntity("/api/v1/todo",
-                                                                   new TodoCreateRequest("TDD 공부", "250", true),
-                                                                   Long.class);
+                                                                   TodoCreateRequest.builder()
+                                                                                    .task("ATDD 공부")
+                                                                                    .timer("270")
+                                                                                    .isDone(false)
+                                                                                    .date(LocalDate.now())
+                                                                                    .build(), Long.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -40,7 +46,12 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
     @DisplayName("PUT /api/v1/todo : todo 수정이 정상적으로 수행될 경우, OK(200)이 반환된다")
     void testPutTodoStatusOK() throws Exception {
         //given
-        TodoCreateRequest updateRequest = new TodoCreateRequest("ATDD 공부", "270", false);
+        TodoCreateRequest updateRequest = TodoCreateRequest.builder()
+                                                           .task("ATDD 공부")
+                                                           .timer("270")
+                                                           .isDone(false)
+                                                           .date(LocalDate.now())
+                                                           .build();
 
         HttpEntity<TodoCreateRequest> updateEntity = new HttpEntity<>(updateRequest);
 

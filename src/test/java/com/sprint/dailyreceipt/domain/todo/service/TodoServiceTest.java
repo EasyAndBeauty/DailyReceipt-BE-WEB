@@ -1,14 +1,17 @@
 package com.sprint.dailyreceipt.domain.todo.service;
 
 import com.sprint.dailyreceipt.domain.account.Account;
+import com.sprint.dailyreceipt.domain.account.repository.AccountRepository;
 import com.sprint.dailyreceipt.domain.todo.entity.Todo;
 import com.sprint.dailyreceipt.domain.todo.repository.TodoRepository;
 import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
+import com.sprint.dailyreceipt.web.todo.model.TodoUpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
@@ -28,11 +31,14 @@ class TodoServiceTest {
 
     private TodoService todoService;
 
+    private AccountRepository accountRepository;
+
     @BeforeEach
     public void init() {
         todoRepository = mock(TodoRepository.class);
+        accountRepository = mock(AccountRepository.class);
 
-        todoService = new TodoService(todoRepository);
+        todoService = new TodoService(todoRepository, accountRepository);
     }
 
 
@@ -40,10 +46,22 @@ class TodoServiceTest {
     @DisplayName("save() : Todo 항목이 정상일 경우, 정상적으로 Todo를 저장할 수 있다")
     void testSave() throws Exception {
         //given
-        TodoCreateRequest request = new TodoCreateRequest("TDD 공부", "250", true);
-        when(todoRepository.save(any()))
-                .thenReturn(
-                        new Todo(1L, new Account(1L), "TDD 공부", "250", true, ZonedDateTime.now(), ZonedDateTime.now()));
+        TodoCreateRequest request = TodoCreateRequest.builder()
+                                                           .task("TDD 공부")
+                                                           .timer("250")
+                                                           .isDone(true)
+                                                           .date(LocalDate.now())
+                                                           .build();
+
+        when(todoRepository.save(any())).thenReturn(Todo.builder()
+                                                        .id(1L)
+                                                        .account(new Account(1L))
+                                                        .task("TDD 공부")
+                                                        .timer("250")
+                                                        .isDone(true)
+                                                        .createdAt(ZonedDateTime.now())
+                                                        .updatedAt(ZonedDateTime.now())
+                                                        .build());
 
         //when
         todoService.save(request);
@@ -65,15 +83,22 @@ class TodoServiceTest {
                                                  .isDone(true)
                                                  .build());
 
-        TodoCreateRequest updateRequest = new TodoCreateRequest("ATDD 공부", "270", false);
+        TodoUpdateResponse updateResponse = new TodoUpdateResponse("ATDD 공부", "270", false);
+
+        TodoCreateRequest updateRequest = TodoCreateRequest.builder()
+                                                           .task("ATDD 공부")
+                                                           .timer("270")
+                                                           .isDone(false)
+                                                           .date(LocalDate.now())
+                                                           .build();
 
         when(todoRepository.findById(anyLong()))
                 .thenReturn(Optional.of(savedTodo));
 
-        when(todoService.update(any(), anyLong())).thenReturn(updateRequest);
+        when(todoService.update(any(), anyLong())).thenReturn(updateResponse);
 
         //when
-        TodoCreateRequest updatedResponse = todoService.update(updateRequest, 1L);
+        TodoUpdateResponse updatedResponse = todoService.update(updateRequest, 1L);
 
         //then
         assertAll(

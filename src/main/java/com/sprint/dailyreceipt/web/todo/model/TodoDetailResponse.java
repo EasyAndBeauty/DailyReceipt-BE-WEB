@@ -1,5 +1,6 @@
 package com.sprint.dailyreceipt.web.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,10 @@ import java.time.ZonedDateTime;
 public class TodoDetailResponse {
 
     private String task;
-    private ZonedDateTime createdAt;
+
+    private String date;
+
+    @JsonProperty(value = "isDone")
     private boolean isDone;
 
     private String hour;
@@ -19,9 +23,9 @@ public class TodoDetailResponse {
     private String minute;
 
     @Builder
-    public TodoDetailResponse(String task, ZonedDateTime createdAt, boolean isDone, String timer) {
+    public TodoDetailResponse(String task, String date, boolean isDone, String timer) {
         this.task = task;
-        this.createdAt = createdAt;
+        this.date = date;
         this.isDone = isDone;
         this.hour = String.valueOf(Integer.parseInt(timer) / 60);
         this.minute = String.valueOf(Integer.parseInt(timer) % 60);

@@ -39,9 +39,10 @@ public class Todo extends BaseEntity {
 
     private boolean isDone;
 
+    private String date;
 
     @Builder
-    public Todo(Long id, Account account, String task, String timer, boolean isDone, ZonedDateTime createdAt,
+    public Todo(Long id, Account account, String task, String timer, boolean isDone, String date, ZonedDateTime createdAt,
                 ZonedDateTime updatedAt) {
         super(createdAt, updatedAt);
         this.id = id;
@@ -49,6 +50,7 @@ public class Todo extends BaseEntity {
         this.task = task;
         this.timer = timer;
         this.isDone = isDone;
+        this.date = date;
     }
 
     public Todo update(Todo updatedTodo) {

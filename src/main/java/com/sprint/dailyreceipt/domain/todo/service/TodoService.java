@@ -6,12 +6,13 @@ import com.sprint.dailyreceipt.domain.todo.entity.Todo;
 import com.sprint.dailyreceipt.domain.todo.repository.TodoRepository;
 import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
 import com.sprint.dailyreceipt.web.todo.model.TodoDetailResponse;
-import com.sprint.dailyreceipt.web.todo.model.TodoFindRequest;
+import com.sprint.dailyreceipt.web.todo.model.TodoUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -40,13 +41,13 @@ public class TodoService {
         return savedTodo.getId();
     }
 
-    public TodoCreateRequest update(TodoCreateRequest updatedRequest, long todoId) {
+    public TodoUpdateResponse update(TodoCreateRequest updatedRequest, long todoId) {
         Todo savedTodo = todoRepository.findById(todoId)
                                        .orElseThrow(EntityNotFoundException::new);
 
         Todo updatedTodo = savedTodo.update(updatedRequest.toEntity());
 
-        return new TodoCreateRequest(updatedTodo.getTask(), updatedTodo.getTimer(), updatedTodo.isDone());
+        return new TodoUpdateResponse(updatedTodo.getTask(), updatedTodo.getTimer(), updatedTodo.isDone());
     }
 
     public long save(TodoCreateRequest request, String accountSocialId) {
@@ -60,6 +61,7 @@ public class TodoService {
                         .isDone(request.isDone())
                         .createdAt(ZonedDateTime.now())
                         .updatedAt(ZonedDateTime.now())
+                        .date(request.getDate().toString())
                         .build();
 
         savedAccount.addTodo(todo);
@@ -69,12 +71,12 @@ public class TodoService {
         return savedTodo.getId();
     }
 
-    public List<TodoDetailResponse> find(TodoFindRequest request, String accountSocialId) {
+    public List<TodoDetailResponse> find(LocalDate date, String accountSocialId) {
         List<Todo> todos = todoRepository.findTodoBySocialId(accountSocialId);
 
-        int year = request.getDate().getYear();
-        int month = request.getDate().getMonth().getValue();
-        int day = request.getDate().getDayOfMonth();
+        int year = date.getYear();
+        int month = date.getMonth().getValue();
+        int day = date.getDayOfMonth();
 
         return todos.stream()
                     .filter(todo -> todo.getCreatedAt().getMonth().getValue() == month)
@@ -82,7 +84,7 @@ public class TodoService {
                     .filter(todo -> todo.getCreatedAt().getDayOfMonth() == day)
                     .map(todo -> TodoDetailResponse.builder()
                                                    .task(todo.getTask())
-                                                   .createdAt(todo.getCreatedAt())
+                                                   .date(todo.getDate())
                                                    .isDone(todo.isDone())
                                                    .timer(todo.getTimer())
                                                    .build(
