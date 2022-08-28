@@ -19,3 +19,12 @@ spring:
         format_sql: true
         show_sql: true
         use_sql_comments: true
+
+social:
+  kakao:
+    client-id: ENC(YhRstpqSMrFjoMvKPaY2bYEB+wseFUvNH5J/Gqra8kyQ+BfdCAjvsk93C+7B5l6/)
+    client-secret: ENC(OsvS4WEFAAIJAjp2gWhnPs8cG1I6EOpudqdqmOYL/tlgWSMtY0qa8lIwWWb99vNz)
+
+private:
+  ip: ENC(iK4YY6wB9qVifcQlTgckhYQpkIywPvh1)
+

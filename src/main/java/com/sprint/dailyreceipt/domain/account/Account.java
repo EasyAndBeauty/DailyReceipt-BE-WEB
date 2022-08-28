@@ -20,7 +20,20 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
+    private String email;
+
+    private String uniqueIdBySocial;
+
     public Account(Long id) {
         this.id = id;
+    }
+
+    private Account(String email, String uniqueIdBySocial) {
+        this.email = email;
+        this.uniqueIdBySocial = uniqueIdBySocial;
+    }
+
+    public static Account of(String email, String uniqueIdBySocial) {
+        return new Account(email, uniqueIdBySocial);
     }
 }
