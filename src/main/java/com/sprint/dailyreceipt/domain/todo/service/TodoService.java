@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -100,5 +99,10 @@ public class TodoService {
         int day = Integer.parseInt(stringTokenizer.nextToken());
 
         return targetYear == year && targetMonth == month && targetDay == day;
+    }
+
+    public void delete(long todoId) {
+        todoRepository.delete(todoRepository.findById(todoId)
+                                            .orElseThrow(EntityNotFoundException::new));
     }
 }

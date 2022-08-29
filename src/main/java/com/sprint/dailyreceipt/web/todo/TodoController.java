@@ -6,6 +6,7 @@ import com.sprint.dailyreceipt.web.todo.model.TodoDetailResponse;
 import com.sprint.dailyreceipt.web.todo.model.TodoUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +48,10 @@ public class TodoController {
             @PathVariable("account-id") String accountSocialId) {
 
         return todoService.find(date, accountSocialId);
+    }
+
+    @DeleteMapping("/v1/todo/{todo-id}")
+    public void deleteTodoV1(@PathVariable("todo-id") long todoId) {
+        todoService.delete(todoId);
     }
 }
