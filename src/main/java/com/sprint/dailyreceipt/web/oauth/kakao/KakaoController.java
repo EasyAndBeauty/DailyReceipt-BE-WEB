@@ -51,7 +51,8 @@ public class KakaoController {
         log.info("callBackUrl = {}", callBackUrl);
 
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
-                                                                                      clientId, DEV_REDIRECT_URI,
+                                                                                      clientId,
+                                                                                      "http://localhost:3000/auth/kakao/callback",
                                                                                       code, clientSecret);
 
         String result = kakaoClientForAccountInfo.accessToken(KAKAO_CONTENT_TYPE, "Bearer " + kakaoTokenResponse.getAccessToken());
