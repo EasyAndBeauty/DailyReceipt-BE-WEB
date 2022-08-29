@@ -18,9 +18,7 @@ public class TodoDetailResponse {
     @JsonProperty(value = "isDone")
     private boolean isDone;
 
-    private String hour;
-
-    private String minute;
+    private String timer;
 
     private long todoId;
 
@@ -29,8 +27,7 @@ public class TodoDetailResponse {
         this.task = task;
         this.date = date;
         this.isDone = isDone;
-        this.hour = String.valueOf(Integer.parseInt(timer) / 60);
-        this.minute = String.valueOf(Integer.parseInt(timer) % 60);
+        this.timer = timer;
         this.todoId = todoId;
     }
 }
