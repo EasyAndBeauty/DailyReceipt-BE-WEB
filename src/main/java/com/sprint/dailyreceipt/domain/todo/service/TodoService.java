@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,14 +75,8 @@ public class TodoService {
     public List<TodoDetailResponse> find(LocalDate date, String accountSocialId) {
         List<Todo> todos = todoRepository.findTodoBySocialId(accountSocialId);
 
-        int year = date.getYear();
-        int month = date.getMonth().getValue();
-        int day = date.getDayOfMonth();
-
         return todos.stream()
-                    .filter(todo -> todo.getCreatedAt().getMonth().getValue() == month)
-                    .filter(todo -> todo.getCreatedAt().getYear() == year)
-                    .filter(todo -> todo.getCreatedAt().getDayOfMonth() == day)
+                    .filter(todo -> isSameDate(date, todo.getDate()))
                     .map(todo -> TodoDetailResponse.builder()
                                                    .task(todo.getTask())
                                                    .date(todo.getDate())
@@ -91,5 +86,19 @@ public class TodoService {
                                                    .build(
                                                    ))
                     .collect(Collectors.toList());
+    }
+
+    private boolean isSameDate(LocalDate date, String todoDate) {
+        int targetYear = date.getYear();
+        int targetMonth = date.getMonth().getValue();
+        int targetDay = date.getDayOfMonth();
+
+        StringTokenizer stringTokenizer = new StringTokenizer(todoDate, "-");
+
+        int year = Integer.parseInt(stringTokenizer.nextToken());
+        int month = Integer.parseInt(stringTokenizer.nextToken());
+        int day = Integer.parseInt(stringTokenizer.nextToken());
+
+        return targetYear == year && targetMonth == month && targetDay == day;
     }
 }
