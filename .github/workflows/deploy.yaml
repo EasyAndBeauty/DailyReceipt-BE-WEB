@@ -66,14 +66,16 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Build and push to DockerHub
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: ${{ secrets.DOCKER_TAG }}
+      - name: Build and Push local
+        run: |
+          docker build -f Dockerfile-local . --tag {{ secrets.DOCKER_LOCAL_TAG }}
+          docker push {{ secrets.DOCKER_LOCAL_TAG }}
+
+      - name: Build and Push Dev
+        run: |
+          docker build -f Dockerfile-dev . --tag {{ secrets.DOCKER_TAG }}
+          docker push {{ secrets.DOCKER_TAG }}
+          
 
   deploy:
     needs: build
@@ -82,5 +84,7 @@ jobs:
     steps:
       - name: Docker run
         run: |
-            sudo docker stop receipt && docker rm receipt && docker rmi ${{ secrets.DOCKER_TAG }}
-            sudo docker run -d -p 8080:8080 -e RECEIPT_JASYPT_PASSWORD=${{ secrets.RECEIPT_JASYPT_PASSWORD }} --name receipt ${{ secrets.DOCKER_TAG }}
+            sudo docker stop receipt-dev && docker rm receipt-dev && docker rmi ${{ secrets.DOCKER_TAG }}
+            sudo docker run -d -p 8081:8081 -e RECEIPT_JASYPT_PASSWORD=${{ secrets.RECEIPT_JASYPT_PASSWORD }} --name receipt-dev ${{ secrets.DOCKER_TAG }}
+            sudo docker stop receipt-local && docker rm receipt-local && docker rmi ${{ secrets.DOCKER_LOCAL_TAG }}
+            sudo docker run -d -p 8080:8080 -e RECEIPT_JASYPT_PASSWORD=${{ secrets.RECEIPT_JASYPT_PASSWORD }} --name receipt-local ${{ secrets.DOCKER_LOCAL_TAG }}

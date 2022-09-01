@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.sprint.dailyreceipt.global.ReceiptConstants.DEV_REDIRECT_URI;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.GRANT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.KAKAO_CONTENT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.LOCAL_REDIRECT_URI;
@@ -36,22 +35,12 @@ public class KakaoController {
     private String clientSecret;
 
     @Value("${private.ip}")
-    private String ipUrl;
+    private String redirectUri;
 
     @GetMapping("/auth/kakao/callback")
     public ResponseEntity<KakaoUserInfo> callbackOfKakao(@RequestParam String code){
-        StringBuilder url = new StringBuilder(ipUrl);
-
-        String callBackUrl = url.append(":8080")
-                                .append("/auth")
-                                .append("/kakao")
-                                .append("/callback")
-                                .toString();
-
-        log.info("callBackUrl = {}", callBackUrl);
-
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
-                                                                                      clientId, DEV_REDIRECT_URI,
+                                                                                      clientId, redirectUri,
                                                                                       code, clientSecret);
 
         String result = kakaoClientForAccountInfo.accessToken(KAKAO_CONTENT_TYPE, "Bearer " + kakaoTokenResponse.getAccessToken());
