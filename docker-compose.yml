@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  test_db:
+    image: mysql
+    container_name: test_db
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_ROOT_USER: '%'
+      MYSQL_ROOT_PASSWORD: 1234
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    ports:
+      - '3306:3306'
+    networks:
+      - test_network
+
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile-local
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - test_db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://test_db:3306/testdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      RECEIPT_JASYPT_PASSWORD: ${RECEIPT_JASYPT_PASSWORD}
+    container_name: spring_boot
+    networks:
+      - test_network
+
+networks:
+  test_network:

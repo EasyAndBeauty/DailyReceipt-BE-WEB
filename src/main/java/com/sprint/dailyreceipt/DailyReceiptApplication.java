@@ -1,0 +1,15 @@
+package com.sprint.dailyreceipt;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@EnableFeignClients(basePackages = "com.sprint.dailyreceipt.web")
+public class DailyReceiptApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DailyReceiptApplication.class, args);
+	}
+
+}

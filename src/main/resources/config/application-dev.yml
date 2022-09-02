@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: ENC(VyKI2gESwk7jR1KeQRv1/n3QC/+mkTUY+sGBTP8UGCLtFRmBwZOq1EjWG6CsIFrcUxjZ+6pwM3ZdTU3vtVsVou862FY6s+WvvMmpEbjP//O2a37FjlGzFxxlASnxIWBWiudCpXOTfYi7mflz0RkyDLudUp/q7bb5VqnDthL1FYcQBzffiw80KFDRtWvXHzR2)
+    username: ENC(SJXCFeg8lchDwSWHzUmMIg==)
+    password: ENC(w1EiI2qrdnDprgDp66KjZa4Nvzg6hcf6)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+
+social:
+  kakao:
+    client-id: ENC(8A6U6di5vT1N/u+nWYIWah6tGy0xDSdLJiB/vcLptoGKNdZiDmqxwM52a+CLneS4)
+    client-secret: ENC(OsvS4WEFAAIJAjp2gWhnPs8cG1I6EOpudqdqmOYL/tlgWSMtY0qa8lIwWWb99vNz)
+
+private:
+  ip: "https://www.daily-receipt.com/auth/kakao/callback"
