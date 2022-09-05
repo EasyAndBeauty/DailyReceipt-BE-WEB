@@ -28,3 +28,12 @@ social:
 private:
   ip: ENC(iK4YY6wB9qVifcQlTgckhYQpkIywPvh1)
 
+jwt:
+  token:
+    header-type: JWT
+    header: Authorization
+    secret: ENC(BTkM7xq4W3pJHktgWPuVIrHvdd8uiuHMSuZmNvxtvSbY3XlLm3RBYnyj8ZeyZbo7O/v5bzlfAPQuf8k9MnYjPnTwrt04H2cH490OHV9BAZHCF3zk8rOesInQk5cSmhIMEuLBh7P1ZD4erQbdmkPRVveJFXDxR85nvQbcqwVl9jQyzhR3ETiAqJ7cpa4DZQqEPuRBkZiTZHqtGXsz7Ehx8XZ+W0qqKbnaJfoaJEQJ1nEvWfe4WvhQjc5S7+pBABHA91vr6fdugqE=)
+    access-time: 604800000 # 7일
+    refresh-time: 2628000000 # 한달
+    issuer: receipt
+
