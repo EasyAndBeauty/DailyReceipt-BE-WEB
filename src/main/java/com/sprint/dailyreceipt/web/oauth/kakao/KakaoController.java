@@ -1,25 +1,22 @@
 package com.sprint.dailyreceipt.web.oauth.kakao;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.sprint.dailyreceipt.domain.account.service.AccountService;
 import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoTokenResponse;
-import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoUserInfo;
+import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoProfileResponse;
+import com.sprint.dailyreceipt.web.token.model.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.sprint.dailyreceipt.global.ReceiptConstants.AUTHORIZATION_HEADER_BEARER;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.GRANT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.KAKAO_CONTENT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.LOCAL_REDIRECT_URI;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class KakaoController {
 
     private final KakaoClientForToken kakaoClientForToken;
@@ -38,26 +35,14 @@ public class KakaoController {
     private String redirectUri;
 
     @GetMapping("/auth/kakao/callback")
-    public ResponseEntity<KakaoUserInfo> callbackOfKakao(@RequestParam String code){
+    public TokenResponse callbackOfKakao(@RequestParam String code){
         KakaoTokenResponse kakaoTokenResponse = kakaoClientForToken.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
                                                                                       clientId, redirectUri,
                                                                                       code, clientSecret);
 
-        String result = kakaoClientForAccountInfo.accessToken(KAKAO_CONTENT_TYPE, "Bearer " + kakaoTokenResponse.getAccessToken());
+        KakaoProfileResponse kakaoProfileResponse = kakaoClientForAccountInfo.getAccessTokenForUserInfo(
+                KAKAO_CONTENT_TYPE, AUTHORIZATION_HEADER_BEARER + kakaoTokenResponse.getAccessToken());
 
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(result);
-
-        String id = element.getAsJsonObject().get("id").getAsString();
-        String email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-        String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname")
-                                 .getAsString();
-
-        KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(id, email, nickname);
-
-        accountService.signIn(kakaoUserInfo);
-
-        return ResponseEntity.ok(kakaoUserInfo);
+        return accountService.signIn(kakaoProfileResponse);
     }
-
 }
