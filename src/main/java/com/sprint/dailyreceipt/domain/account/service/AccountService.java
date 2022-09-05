@@ -2,15 +2,15 @@ package com.sprint.dailyreceipt.domain.account.service;
 
 import com.sprint.dailyreceipt.domain.account.Account;
 import com.sprint.dailyreceipt.domain.account.repository.AccountRepository;
-import com.sprint.dailyreceipt.web.account.model.AccountDetailInfo;
-import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoUserInfo;
+import com.sprint.dailyreceipt.domain.token.entity.Token;
+import com.sprint.dailyreceipt.domain.token.repository.TokenRepository;
+import com.sprint.dailyreceipt.global.jwt.JwtService;
+import com.sprint.dailyreceipt.web.oauth.kakao.model.KakaoProfileResponse;
+import com.sprint.dailyreceipt.web.token.model.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,26 +20,41 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public void signIn(KakaoUserInfo kakaoUserInfo) {
+    private final JwtService jwtService;
 
-        Optional<Account> findAccount = accountRepository.findByUniqueIdBySocial(kakaoUserInfo.getId());
+    private final TokenRepository tokenRepository;
 
-        findAccount.ifPresentOrElse(account -> {
-                                        log.info("signIn");
-                                    }, () -> {
-                                        Account account = Account.of(kakaoUserInfo.getEmail(),
-                                                                     kakaoUserInfo.getId(),
-                                                                     kakaoUserInfo.getNickname());
+    public TokenResponse signIn(KakaoProfileResponse kakaoProfileResponse) {
+        String uniqueIdBySocial = kakaoProfileResponse.getId();
 
-                                        accountRepository.save(account);
-                                    }
-        );
-    }
+        String accessToken = jwtService.createAccessToken(uniqueIdBySocial);
+        String refreshToken = jwtService.createRefreshToken(uniqueIdBySocial);
 
-    public AccountDetailInfo getUserDetailInfo(String socialId) {
-        Account savedAccount = accountRepository.findByUniqueIdBySocial(socialId)
-                                                .orElseThrow(EntityNotFoundException::new);
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
 
-        return new AccountDetailInfo(savedAccount);
+        tokenRepository.findByUniqueIdBySocial(uniqueIdBySocial)
+                       .ifPresentOrElse(
+                               token -> {
+                                   token.exchangeRefreshToken(refreshToken);
+                                   tokenResponse.setFirst(false);
+                               },
+                               () -> {
+                                   Token token = Token.builder()
+                                                      .refreshToken(refreshToken)
+                                                      .uniqueIdBySocial(uniqueIdBySocial)
+                                                      .build();
+
+                                   tokenRepository.save(token);
+
+                                   Account createdAccount = Account.of(token);
+                                   accountRepository.save(createdAccount);
+
+                                   token.addAccount(createdAccount);
+                                   tokenResponse.setFirst(true);
+                                   tokenRepository.save(token);
+                               }
+                       );
+
+        return tokenResponse;
     }
 }

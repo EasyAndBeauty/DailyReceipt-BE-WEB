@@ -17,6 +17,6 @@ public class AccountController {
 
     @GetMapping("/v1/user/{user-id}")
     public AccountDetailInfo searchUserInfo(@PathVariable("user-id") String socialId) {
-        return accountService.getUserDetailInfo(socialId);
+        return null;
     }
 }

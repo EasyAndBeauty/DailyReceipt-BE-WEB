@@ -7,17 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class KakaoUserInfo {
+public class KakaoProfileResponse {
 
     String id;
 
-    String email;
-
-    String nickname;
-
-    public KakaoUserInfo(String id, String email, String nickname) {
+    public KakaoProfileResponse(String id) {
         this.id = id;
-        this.email = email;
-        this.nickname = nickname;
     }
 }

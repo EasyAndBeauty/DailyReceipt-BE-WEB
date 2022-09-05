@@ -10,15 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AccountDetailInfo {
 
-    private String email;
-
     private String nickname;
 
     private String uniqueIdBySocial;
 
     public AccountDetailInfo(Account account) {
-        this.email = account.getEmail();
         this.nickname = account.getNickname();
-        this.uniqueIdBySocial = account.getUniqueIdBySocial();
     }
 }

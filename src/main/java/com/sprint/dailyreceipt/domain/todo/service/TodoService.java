@@ -51,7 +51,7 @@ public class TodoService {
     }
 
     public long save(TodoCreateRequest request, String accountSocialId) {
-        Account savedAccount = accountRepository.findByUniqueIdBySocial(accountSocialId)
+        Account savedAccount = accountRepository.findAccountByUniqueId(accountSocialId)
                                                 .orElseThrow(EntityNotFoundException::new);
 
         Todo todo = Todo.builder()
