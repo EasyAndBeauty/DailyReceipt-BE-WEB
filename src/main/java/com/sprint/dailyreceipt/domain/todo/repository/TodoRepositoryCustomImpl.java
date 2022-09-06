@@ -23,7 +23,6 @@ public class TodoRepositoryCustomImpl implements TodoRepositoryCustom{
         return queryFactory.selectFrom(todo)
                            .innerJoin(todo.account, account)
                            .fetchJoin()
-                           .where(account.uniqueIdBySocial.contains(accountSocialId))
                            .fetch();
     }
 }
