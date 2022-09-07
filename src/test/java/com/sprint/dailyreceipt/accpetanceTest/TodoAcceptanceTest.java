@@ -4,6 +4,7 @@ import com.sprint.dailyreceipt.domain.todo.repository.TodoRepository;
 import com.sprint.dailyreceipt.support.AbstractAcceptanceTest;
 import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
 
     @Test
     @DisplayName("POST /api/v1/todo : todo 생성이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    @Disabled("Todo 기능 수정 예정")
     void testPostTodoStatusOK() throws Exception {
         ResponseEntity<Long> response = restTemplate.postForEntity("/api/v1/todo",
                                                                    TodoCreateRequest.builder()
@@ -44,6 +46,7 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
 
     @Test
     @DisplayName("PUT /api/v1/todo : todo 수정이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    @Disabled("Todo 기능 수정 예정")
     void testPutTodoStatusOK() throws Exception {
         //given
         TodoCreateRequest updateRequest = TodoCreateRequest.builder()
