@@ -1,7 +1,10 @@
 package com.sprint.dailyreceipt.global.jwt;
 
 import com.sprint.dailyreceipt.domain.token.entity.TokenType;
+import com.sprint.dailyreceipt.global.exception.jwt.ExpiredJwtTokenException;
+import com.sprint.dailyreceipt.global.exception.jwt.InvalidJwtTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -75,19 +78,40 @@ public class JwtService {
     }
 
     public Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                   .setSigningKey(key)
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody();
+        try {
+            return Jwts.parserBuilder()
+                       .setSigningKey(key)
+                       .build()
+                       .parseClaimsJws(token)
+                       .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtTokenException();
+        }
     }
 
     public String getSubject(String token) {
-        return Jwts.parserBuilder()
-                   .setSigningKey(key)
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody()
-                   .getSubject();
+        try {
+            return Jwts.parserBuilder()
+                       .setSigningKey(key)
+                       .build()
+                       .parseClaimsJws(token)
+                       .getBody()
+                       .getSubject();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtTokenException();
+        }
+    }
+
+    public void validateToken(String jwt) {
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt);
+        } catch (ExpiredJwtTokenException e) {
+            throw new ExpiredJwtTokenException();
+        } catch (Exception e) {
+            throw new InvalidJwtTokenException();
+        }
     }
 }
