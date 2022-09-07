@@ -22,4 +22,12 @@ public class ReceiptConstants {
 
     public static final String ROLE = "USER";
 
+    //Exception
+
+    public static final String ERROR_LOG_MESSAGE = "Exception = {} , message = {}";
+
+    public static final String CONTENT_TYPE = "application/json";
+
+    public static final String CHARACTER_ENCODING = "UTF-8";
+
 }
