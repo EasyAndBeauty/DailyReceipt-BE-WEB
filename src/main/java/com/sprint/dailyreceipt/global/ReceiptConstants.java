@@ -30,4 +30,8 @@ public class ReceiptConstants {
 
     public static final String CHARACTER_ENCODING = "UTF-8";
 
+    //White List
+    public static final String[] whiteList =
+            {"/auth/kakao/callback", "/test"};
+
 }
