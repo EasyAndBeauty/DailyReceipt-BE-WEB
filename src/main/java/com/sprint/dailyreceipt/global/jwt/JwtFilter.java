@@ -9,6 +9,7 @@ import com.sprint.dailyreceipt.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.PatternMatchUtils;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.CHARACTER_ENCODING;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.CONTENT_TYPE;
 import static com.sprint.dailyreceipt.global.ReceiptConstants.ERROR_LOG_MESSAGE;
+import static com.sprint.dailyreceipt.global.ReceiptConstants.whiteList;
 
 @Component
 @Slf4j
@@ -38,15 +40,23 @@ public class JwtFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
+        String requestURI = httpRequest.getRequestURI();
+
         String jwt = JwtUtil.resolveToken(httpRequest);
 
         try {
-            jwtService.validateToken(jwt);
+            if(isLoginCheckPath(requestURI)) {
+                jwtService.validateToken(jwt);
+            }
         } catch (InvalidJwtTokenException | ExpiredJwtTokenException exception) {
             sendErrorMessage((HttpServletResponse) response, exception);
         }
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isLoginCheckPath(String requestURI) {
+        return !PatternMatchUtils.simpleMatch(whiteList, requestURI);
     }
 
     private void sendErrorMessage(HttpServletResponse response, BusinessException e) throws IOException {
