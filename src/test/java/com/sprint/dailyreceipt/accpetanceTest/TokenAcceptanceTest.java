@@ -1,9 +1,9 @@
 package com.sprint.dailyreceipt.accpetanceTest;
 
 import com.sprint.dailyreceipt.domain.token.entity.Token;
-import com.sprint.dailyreceipt.domain.token.repository.TokenRepository;
+import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
 import com.sprint.dailyreceipt.support.AbstractAcceptanceTest;
-import com.sprint.dailyreceipt.web.token.model.TokenResponse;
+import com.sprint.dailyreceipt.domain.token.api.model.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

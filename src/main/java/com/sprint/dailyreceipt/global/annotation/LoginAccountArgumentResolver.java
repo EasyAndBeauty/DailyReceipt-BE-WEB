@@ -1,10 +1,11 @@
 package com.sprint.dailyreceipt.global.annotation;
 
-import com.sprint.dailyreceipt.domain.account.Account;
+import com.sprint.dailyreceipt.domain.account.entity.Account;
 import com.sprint.dailyreceipt.domain.token.entity.Token;
-import com.sprint.dailyreceipt.domain.token.repository.TokenRepository;
-import com.sprint.dailyreceipt.global.exception.jwt.NotHaveTokenException;
-import com.sprint.dailyreceipt.global.jwt.JwtService;
+import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
+import com.sprint.dailyreceipt.global.jwt.application.JwtParseService;
+import com.sprint.dailyreceipt.global.jwt.exception.NotHaveTokenException;
+import com.sprint.dailyreceipt.global.jwt.application.JwtCreateService;
 import com.sprint.dailyreceipt.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final JwtService jwtService;
-
     private final TokenRepository tokenRepository;
+
+    private final JwtParseService jwtParseService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -43,7 +44,7 @@ public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolv
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
         String jwt = JwtUtil.resolveToken(request);
-        String subject = jwtService.getSubject(jwt);
+        String subject = jwtParseService.getSubject(jwt);
 
         Token token = tokenRepository.findByUniqueIdBySocial(subject)
                                      .orElseThrow(NotHaveTokenException::new);
