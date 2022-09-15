@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.sprint.dailyreceipt.domain.account.QAccount.*;
+import static com.sprint.dailyreceipt.domain.account.entity.QAccount.account;
 import static com.sprint.dailyreceipt.domain.todo.entity.QTodo.*;
 
 @RequiredArgsConstructor
