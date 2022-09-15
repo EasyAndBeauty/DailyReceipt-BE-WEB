@@ -22,6 +22,16 @@ public class ReceiptConstants {
 
     public static final String ROLE = "USER";
 
+    public static final String JWT_TOKEN_HEADER_TYPE = "JWT";
+
+    public static final String JWT_TOKEN_HEADER = "Authorization";
+
+    public static final long JWT_TOKEN_ACCESS_TIME = 604800000L;
+
+    public static final long JWT_TOKEN_REFRESH_TIME = 31536000000L;
+
+    public static final String JWT_TOKEN_ISSUER = "receipt";
+
     //Exception
 
     public static final String ERROR_LOG_MESSAGE = "Exception = {} , message = {}";

@@ -1,6 +1,6 @@
 package com.sprint.dailyreceipt.domain.token.entity;
 
-import com.sprint.dailyreceipt.domain.account.Account;
+import com.sprint.dailyreceipt.domain.account.entity.Account;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

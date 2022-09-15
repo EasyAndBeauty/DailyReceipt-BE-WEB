@@ -1,8 +1,8 @@
 package com.sprint.dailyreceipt.accpetanceTest;
 
-import com.sprint.dailyreceipt.domain.todo.repository.TodoRepository;
+import com.sprint.dailyreceipt.domain.todo.dao.TodoRepository;
 import com.sprint.dailyreceipt.support.AbstractAcceptanceTest;
-import com.sprint.dailyreceipt.web.todo.model.TodoCreateRequest;
+import com.sprint.dailyreceipt.domain.todo.api.model.TodoCreateRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

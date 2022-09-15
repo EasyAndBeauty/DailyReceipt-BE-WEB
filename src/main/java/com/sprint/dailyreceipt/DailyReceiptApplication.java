@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.sprint.dailyreceipt.web")
+@EnableFeignClients(basePackages = "com.sprint.dailyreceipt.infra")
 public class DailyReceiptApplication {
 
 	public static void main(String[] args) {

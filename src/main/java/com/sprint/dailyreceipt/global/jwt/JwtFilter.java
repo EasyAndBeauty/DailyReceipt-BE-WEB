@@ -3,8 +3,10 @@ package com.sprint.dailyreceipt.global.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.dailyreceipt.global.exception.BusinessException;
 import com.sprint.dailyreceipt.global.exception.ExceptionResponseInfo;
-import com.sprint.dailyreceipt.global.exception.jwt.ExpiredJwtTokenException;
-import com.sprint.dailyreceipt.global.exception.jwt.InvalidJwtTokenException;
+import com.sprint.dailyreceipt.global.jwt.application.JwtParseService;
+import com.sprint.dailyreceipt.global.jwt.application.JwtSupport;
+import com.sprint.dailyreceipt.global.jwt.exception.ExpiredJwtTokenException;
+import com.sprint.dailyreceipt.global.jwt.exception.InvalidJwtTokenException;
 import com.sprint.dailyreceipt.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +32,9 @@ import static com.sprint.dailyreceipt.global.ReceiptConstants.whiteList;
 @RequiredArgsConstructor
 public class JwtFilter implements Filter {
 
-    private final JwtService jwtService;
-
     private final ObjectMapper objectMapper;
+
+    private final JwtSupport jwtSupport;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -46,7 +48,7 @@ public class JwtFilter implements Filter {
 
         try {
             if(isLoginCheckPath(requestURI)) {
-                jwtService.validateToken(jwt);
+                jwtSupport.validateToken(jwt);
             }
         } catch (InvalidJwtTokenException | ExpiredJwtTokenException exception) {
             sendErrorMessage((HttpServletResponse) response, exception);
