@@ -1,8 +1,7 @@
 package com.sprint.dailyreceipt.domain.account.application;
 
-import com.sprint.dailyreceipt.domain.account.entity.Account;
-import com.sprint.dailyreceipt.domain.account.dao.AccountRepository;
 import com.sprint.dailyreceipt.domain.token.api.model.TokenResponse;
+import com.sprint.dailyreceipt.domain.token.application.TokenCreateService;
 import com.sprint.dailyreceipt.domain.token.entity.Token;
 import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
 import com.sprint.dailyreceipt.global.jwt.application.JwtCreateService;
@@ -18,9 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AccountSignInService {
 
-    private final AccountRepository accountRepository;
+    private final AccountSignUpService accountSignUpService;
 
     private final JwtCreateService jwtCreateService;
+
+    private final TokenCreateService tokenCreateService;
 
     private final TokenRepository tokenRepository;
 
@@ -39,19 +40,11 @@ public class AccountSignInService {
                                    tokenResponse.setFirst(false);
                                },
                                () -> {
-                                   Token token = Token.builder()
-                                                      .refreshToken(refreshToken)
-                                                      .uniqueIdBySocial(uniqueIdBySocial)
-                                                      .build();
+                                   Token createdToken = tokenCreateService.create(refreshToken, uniqueIdBySocial);
 
-                                   tokenRepository.save(token);
+                                   accountSignUpService.signUp(createdToken);
 
-                                   Account createdAccount = Account.of(token);
-                                   accountRepository.save(createdAccount);
-
-                                   token.addAccount(createdAccount);
                                    tokenResponse.setFirst(true);
-                                   tokenRepository.save(token);
                                }
                        );
 
