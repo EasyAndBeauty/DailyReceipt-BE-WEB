@@ -33,13 +33,4 @@ public class TodoCreateRequest {
         this.isDone = isDone;
         this.date = date;
     }
-
-    public Todo toEntity() {
-        return Todo.builder()
-                   .updatedAt(ZonedDateTime.now())
-                   .timer(timer)
-                   .task(task)
-                   .isDone(isDone)
-                   .build();
-    }
 }
