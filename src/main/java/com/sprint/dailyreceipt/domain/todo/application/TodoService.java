@@ -52,24 +52,26 @@ public class TodoService {
     }
 
     public long save(TodoCreateRequest request, String accountSocialId) {
-        Account savedAccount = accountRepository.findAccountByUniqueId(accountSocialId)
-                                                .orElseThrow(EntityNotFoundException::new);
+//        Account savedAccount = accountRepository.findAccountByUniqueId(accountSocialId)
+//                                                .orElseThrow(EntityNotFoundException::new);
+//
+//        Todo todo = Todo.builder()
+//                        .account(savedAccount)
+//                        .task(request.getTask())
+//                        .timer(request.getTimer())
+//                        .isDone(request.isDone())
+//                        .createdAt(ZonedDateTime.now())
+//                        .updatedAt(ZonedDateTime.now())
+//                        .date(request.getDate().toString())
+//                        .build();
+//
+//        savedAccount.addTodo(todo);
+//
+//        Todo savedTodo = todoRepository.save(todo);
+//
+//        return savedTodo.getId();
 
-        Todo todo = Todo.builder()
-                        .account(savedAccount)
-                        .task(request.getTask())
-                        .timer(request.getTimer())
-                        .isDone(request.isDone())
-                        .createdAt(ZonedDateTime.now())
-                        .updatedAt(ZonedDateTime.now())
-                        .date(request.getDate().toString())
-                        .build();
-
-        savedAccount.addTodo(todo);
-
-        Todo savedTodo = todoRepository.save(todo);
-
-        return savedTodo.getId();
+        return 0L;
     }
 
     public List<TodoInfoResponse> find(LocalDate date, String accountSocialId) {
