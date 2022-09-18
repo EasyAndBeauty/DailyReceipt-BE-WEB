@@ -19,7 +19,7 @@ public class TodoCreateService {
 
         Todo todo = Todo.builder()
                         .account(account)
-                        .date(todoCreateRequest.getDate().toString())
+                        .date(todoCreateRequest.getDate())
                         .isDone(todoCreateRequest.isDone())
                         .timer(todoCreateRequest.getTimer())
                         .task(todoCreateRequest.getTask())

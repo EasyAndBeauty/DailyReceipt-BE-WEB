@@ -48,10 +48,10 @@ class TodoCreateServiceTest {
         Todo todo = Todo.builder()
                         .id(1L)
                         .account(account)
-                        .date("2012-12-04")
-                        .isDone(true)
-                        .timer("05:07")
-                        .task("TDD 공부")
+                        .date(todoCreateRequest.getDate())
+                        .isDone(todoCreateRequest.isDone())
+                        .timer(todoCreateRequest.getTimer())
+                        .task(todoCreateRequest.getTask())
                         .build();
 
         account.addTodo(todo);
