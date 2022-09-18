@@ -47,4 +47,12 @@ public abstract class AbstractAcceptanceTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity(body, headers);
     }
+
+    protected HttpEntity createHttpEntity() {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setBearerAuth(testToken().getRefreshToken());
+
+        return new HttpEntity(headers);
+    }
 }
