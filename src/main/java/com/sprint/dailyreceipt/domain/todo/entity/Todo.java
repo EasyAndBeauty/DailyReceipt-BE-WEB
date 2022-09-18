@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -39,10 +40,10 @@ public class Todo extends BaseEntity {
 
     private boolean isDone;
 
-    private String date;
+    private LocalDate date;
 
     @Builder
-    public Todo(Long id, Account account, String task, String timer, boolean isDone, String date, ZonedDateTime createdAt,
+    public Todo(Long id, Account account, String task, String timer, boolean isDone, LocalDate date, ZonedDateTime createdAt,
                 ZonedDateTime updatedAt) {
         super(createdAt, updatedAt);
         this.id = id;
