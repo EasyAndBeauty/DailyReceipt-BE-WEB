@@ -23,11 +23,16 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     private TokenRepository tokenRepository;
 
-    protected Account testAccount() {
-        return accountRepository.findById(1L).get();
+    protected Account defaultAccount() {
+        return testAccount(1L);
     }
 
     protected Token testToken() {
         return tokenRepository.findById(1L).get();
     }
+
+    protected Account testAccount(long accountId) {
+        return accountRepository.findById(accountId).get();
+    }
+
 }
