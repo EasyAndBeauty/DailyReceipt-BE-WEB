@@ -14,7 +14,11 @@ public enum ExceptionStatus {
     // JWT
     EXPIRED_JWT_TOKEN_EXCEPTION(401, "만료된 토큰입니다.", UNAUTHORIZED),
     INVALID_JWT_TOKEN_EXCEPTION(401, "유효하지 않는 토큰입니다.", UNAUTHORIZED),
-    NOT_HAVE_TOKEN_EXCEPTION(400, "토큰이 존재하지 않습니다.", BAD_REQUEST)
+    NOT_HAVE_TOKEN_EXCEPTION(400, "토큰이 존재하지 않습니다.", BAD_REQUEST),
+
+    // Account
+
+    ACCOUNT_MIS_MATCH_EXCEPTION(400, "사용자가 일치하지 않습니다.", BAD_REQUEST)
 
     ;
 
