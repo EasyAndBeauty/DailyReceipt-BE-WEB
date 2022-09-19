@@ -4,6 +4,7 @@ import com.sprint.dailyreceipt.domain.todo.entity.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Component
@@ -14,5 +15,10 @@ public class TodoDao {
 
     public List<Todo> findTodosByAccountId(long accountId) {
         return todoRepository.findTodosByAccountId(accountId);
+    }
+
+    public Todo findTodoById(long todoId) {
+        return todoRepository.findById(todoId)
+                             .orElseThrow(EntityNotFoundException::new);
     }
 }

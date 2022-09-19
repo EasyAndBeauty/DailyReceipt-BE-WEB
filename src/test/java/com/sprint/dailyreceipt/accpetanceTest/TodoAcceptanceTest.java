@@ -30,7 +30,7 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
         //given
         TodoCreateRequest todoCreateRequest = TodoCreateRequest.builder()
                                                                .task("TDD 공부")
-                                                               .timer("14-24")
+                                                               .timer("14:24")
                                                                .isDone(true)
                                                                .date(LocalDate.now())
                                                                .build();
@@ -58,6 +58,27 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
                                                                               HttpMethod.GET, httpEntity,
                                                                               new ParameterizedTypeReference<List<TodoInfoResponse>>() {
                                                                               });
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    @DisplayName("PUT /api/v1/todo/{todo-id} : Todo 수정 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    void testPutUpdateTodoStatusOK() throws Exception {
+        //given
+        TodoCreateRequest todoCreateRequest = TodoCreateRequest.builder()
+                                                               .task("TDD 공부")
+                                                               .timer("14:24")
+                                                               .isDone(true)
+                                                               .date(LocalDate.now())
+                                                               .build();
+
+        HttpEntity httpEntity = createHttpEntity(todoCreateRequest);
+
+        //when
+        ResponseEntity<TodoInfoResponse> response = template().exchange("/api/v1/todo/1", HttpMethod.PUT, httpEntity,
+                                                                        TodoInfoResponse.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

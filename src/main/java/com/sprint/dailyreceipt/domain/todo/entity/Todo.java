@@ -58,7 +58,7 @@ public class Todo extends BaseEntity {
         this.task = updatedTodo.getTask();
         this.timer = updatedTodo.getTimer();
         this.isDone = updatedTodo.isDone();
-        setUpdatedAt(updatedTodo.getUpdatedAt());
+        setUpdatedAt(ZonedDateTime.now());
 
         return this;
     }

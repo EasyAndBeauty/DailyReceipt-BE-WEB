@@ -32,7 +32,7 @@ public class TodoProfileServiceIntegrationTest extends AbstractIntegrationTest {
     void testFindTodoListWithDate() throws Exception {
         String targetDate = "2022-02-04";
 
-        Account account = testAccount();
+        Account account = defaultAccount();
 
         Todo todo1 = Todo.builder()
                          .date(LocalDate.of(2022, 2, 4))
@@ -64,7 +64,7 @@ public class TodoProfileServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     @DisplayName("findTodoList() : 날짜가 주어지지 않을 경우, 사용자가 생성한 todo List 를 모두 조회할 수 있다")
     void testFindTodoListWithoutDate() throws Exception {
-        Account account = testAccount();
+        Account account = defaultAccount();
 
         Todo todo1 = Todo.builder()
                          .date(LocalDate.of(2022, 2, 4))
