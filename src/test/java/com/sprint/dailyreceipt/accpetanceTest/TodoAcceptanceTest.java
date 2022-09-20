@@ -83,4 +83,18 @@ public class TodoAcceptanceTest extends AbstractAcceptanceTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
+    @Test
+    @DisplayName("DELETE /api/v1/todo/{todo-id} : Todo 삭제 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    void testDeleteTodoStatusOK() throws Exception {
+        //given
+        HttpEntity httpEntity = createHttpEntity();
+
+        //when
+        ResponseEntity<Void> response = template().exchange("/api/v1/todo/1", HttpMethod.DELETE, httpEntity,
+                                                                        Void.class);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

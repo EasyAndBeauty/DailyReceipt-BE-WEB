@@ -7,6 +7,7 @@ import com.sprint.dailyreceipt.domain.todo.api.model.TodoCreateRequest;
 import com.sprint.dailyreceipt.domain.todo.api.model.TodoInfoResponse;
 import com.sprint.dailyreceipt.domain.todo.application.TodoCreateService;
 import com.sprint.dailyreceipt.domain.todo.application.TodoProfileService;
+import com.sprint.dailyreceipt.domain.todo.application.TodoRemoveService;
 import com.sprint.dailyreceipt.domain.todo.application.TodoUpdateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,10 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -33,8 +36,6 @@ class TodoApiTest {
 
     private MockMvc mockMvc;
 
-    private TodoApi todoApi;
-
     private ObjectMapper objectMapper;
 
     private TodoCreateService todoCreateService;
@@ -43,12 +44,17 @@ class TodoApiTest {
 
     private TodoUpdateService todoUpdateService;
 
+    private TodoRemoveService todoRemoveService;
+
     @BeforeEach
     public void init() {
         todoCreateService = mock(TodoCreateService.class);
         todoProfileService = mock(TodoProfileService.class);
         todoUpdateService = mock(TodoUpdateService.class);
-        todoApi = new TodoApi(todoCreateService, todoProfileService, todoUpdateService);
+        todoRemoveService = mock(TodoRemoveService.class);
+
+        TodoApi todoApi = new TodoApi(todoCreateService, todoProfileService,
+                                      todoUpdateService, todoRemoveService);
 
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -149,6 +155,19 @@ class TodoApiTest {
         mockMvc.perform(put("/api/v1/todo/1")
                                 .content(requestData)
                                 .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andDo(print());
+    }
+
+    @Test
+    @DisplayName("removeTodo() : 사용자는 정상적으로 Todo 삭제 요청을 보낼 수 있다.")
+    void testRemoveTodo() throws Exception {
+
+        //when
+        doNothing().when(todoRemoveService).deleteTodo(any(), anyLong());
+
+        //then
+        mockMvc.perform(delete("/api/v1/todo/1"))
                .andExpect(status().isOk())
                .andDo(print());
     }
