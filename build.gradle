@@ -63,6 +63,10 @@ dependencies {
 	testImplementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	testImplementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	testImplementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	//LocalDate Serialize
+	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3"
+	testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3"
 }
 
 tasks.named('test') {

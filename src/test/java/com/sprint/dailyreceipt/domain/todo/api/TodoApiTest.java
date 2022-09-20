@@ -2,11 +2,13 @@ package com.sprint.dailyreceipt.domain.todo.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sprint.dailyreceipt.domain.todo.entity.Todo;
-import com.sprint.dailyreceipt.domain.todo.application.TodoService;
-import com.sprint.dailyreceipt.domain.todo.api.TodoApi;
+import com.sprint.dailyreceipt.domain.account.entity.Account;
 import com.sprint.dailyreceipt.domain.todo.api.model.TodoCreateRequest;
-import com.sprint.dailyreceipt.domain.todo.api.model.TodoUpdateResponse;
+import com.sprint.dailyreceipt.domain.todo.api.model.TodoInfoResponse;
+import com.sprint.dailyreceipt.domain.todo.application.TodoCreateService;
+import com.sprint.dailyreceipt.domain.todo.application.TodoProfileService;
+import com.sprint.dailyreceipt.domain.todo.application.TodoRemoveService;
+import com.sprint.dailyreceipt.domain.todo.application.TodoUpdateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,82 +17,157 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("TodoController Unit Test")
+@DisplayName("TodoApi Unit Test")
 class TodoApiTest {
 
     private MockMvc mockMvc;
 
-    private TodoApi todoApi;
-
-    private TodoService todoService;
-
     private ObjectMapper objectMapper;
+
+    private TodoCreateService todoCreateService;
+
+    private TodoProfileService todoProfileService;
+
+    private TodoUpdateService todoUpdateService;
+
+    private TodoRemoveService todoRemoveService;
 
     @BeforeEach
     public void init() {
-        todoService = mock(TodoService.class);
-        todoApi = new TodoApi(todoService);
-        objectMapper = new ObjectMapper();
+        todoCreateService = mock(TodoCreateService.class);
+        todoProfileService = mock(TodoProfileService.class);
+        todoUpdateService = mock(TodoUpdateService.class);
+        todoRemoveService = mock(TodoRemoveService.class);
 
+        TodoApi todoApi = new TodoApi(todoCreateService, todoProfileService,
+                                      todoUpdateService, todoRemoveService);
+
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders.standaloneSetup(todoApi).build();
     }
 
     @Test
-    @DisplayName("makeTodo() : Todo 항목이 정상일 경우, 정상적으로 Todo 생성 요청을 보낼 수 있다")
+    @DisplayName("makeTodo() : Todo 항목이 정상일 경우, 정상적으로 Todo 생성 요청을 보낼 수 있다.")
     void testMakeTodo() throws Exception {
         //given
-        Todo todo = Todo.builder()
-                        .task("TDD 공부")
-                        .timer("230")
-                        .isDone(true)
-                        .build();
+        TodoCreateRequest todoCreateRequest = TodoCreateRequest.builder()
+                                                               .date(LocalDate.now())
+                                                               .isDone(true)
+                                                               .timer("05:07")
+                                                               .task("TDD 공부")
+                                                               .build();
 
-        String requestData = objectMapper.writeValueAsString(todo);
+        String requestData = objectMapper.writeValueAsString(todoCreateRequest);
 
         //when
-        when(todoService.save(any())).thenReturn(anyLong());
+        when(todoCreateService.create(any(), any()))
+                .thenReturn(1L);
 
         //then
         mockMvc.perform(post("/api/v1/todo")
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestData))
+               .andExpect(status().isCreated())
+               .andDo(print());
+    }
+
+    @Test
+    @DisplayName("searchTodo() : 사용자는 정상적으로 Todo 조회 요청을 보낼 수 있다.")
+    void testSearchTodo() throws Exception {
+        //given
+        String targetDate = "2022-02-04";
+
+        TodoInfoResponse todo1 = TodoInfoResponse.builder()
+                                                 .date("2022-02-04")
+                                                 .isDone(true)
+                                                 .timer("06:06")
+                                                 .task("TDD 공부")
+                                                 .build();
+
+        TodoInfoResponse todo2 = TodoInfoResponse.builder()
+                                                 .date("2022-02-04")
+                                                 .isDone(true)
+                                                 .timer("06:08")
+                                                 .task("ATDD 공부")
+                                                 .build();
+
+        Account account = Account.builder()
+                                 .nickname("user1")
+                                 .build();
+
+        List<TodoInfoResponse> todoList = List.of(todo1, todo2);
+
+        //when
+        when(todoProfileService.findTodoList(account, null))
+                .thenReturn(todoList);
+
+        //then
+        mockMvc.perform(get("/api/v1/todo"))
+               .andExpect(status().isOk())
+               .andDo(print());
+
+        mockMvc.perform(get("/api/v1/todo?targetDate=" + targetDate))
                .andExpect(status().isOk())
                .andDo(print());
     }
 
     @Test
-    @DisplayName("updateTodo() : 변경할 Todo 항목이 정상일 경우, 정상적으로 Todo 수정 요청을 보낼 수 있다")
+    @DisplayName("updateTodo() : 사용자는 정상적으로 Todo 수정 요청을 보낼 수 있다.")
     void testUpdateTodo() throws Exception {
         //given
-        TodoCreateRequest updateRequest = TodoCreateRequest.builder()
-                                                           .task("ATDD 공부")
-                                                           .timer("270")
-                                                           .isDone(false)
-                                                           .date(LocalDate.now())
-                                                           .build();
+        TodoCreateRequest todoCreateRequest = TodoCreateRequest.builder()
+                                                            .task("TDD 공부")
+                                                            .timer("14:24")
+                                                            .isDone(true)
+                                                            .date(LocalDate.now())
+                                                            .build();
 
-        TodoUpdateResponse updateResponse = new TodoUpdateResponse("ATDD 공부", "270", false);
+        TodoInfoResponse todoInfoResponse = TodoInfoResponse.builder()
+                                                            .task("TDD 공부")
+                                                            .timer("14:24")
+                                                            .isDone(true)
+                                                            .date(LocalDate.now().toString())
+                                                            .todoId(1L)
+                                                            .build();
 
-        String requestData = objectMapper.registerModule(new JavaTimeModule())
-                                         .writeValueAsString(updateRequest);
+        String requestData = objectMapper.writeValueAsString(todoCreateRequest);
 
         //when
-        when(todoService.update(any(), anyLong())).thenReturn(updateResponse);
+        when(todoUpdateService.update(any(), anyLong(), any()))
+                .thenReturn(todoInfoResponse);
 
         //then
         mockMvc.perform(put("/api/v1/todo/1")
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .content(requestData))
+                                .content(requestData)
+                                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andDo(print());
+    }
+
+    @Test
+    @DisplayName("removeTodo() : 사용자는 정상적으로 Todo 삭제 요청을 보낼 수 있다.")
+    void testRemoveTodo() throws Exception {
+
+        //when
+        doNothing().when(todoRemoveService).deleteTodo(any(), anyLong());
+
+        //then
+        mockMvc.perform(delete("/api/v1/todo/1"))
                .andExpect(status().isOk())
                .andDo(print());
     }

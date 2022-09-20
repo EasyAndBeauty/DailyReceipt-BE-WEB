@@ -15,10 +15,9 @@ public class TodoRepositoryCustomImpl implements TodoRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Todo> findTodoBySocialId(String accountSocialId) {
+    public List<Todo> findTodosByAccountId(long accountId) {
         return queryFactory.selectFrom(todo)
-                           .innerJoin(todo.account, account)
-                           .fetchJoin()
+                           .innerJoin(todo.account, account).fetchJoin()
                            .fetch();
     }
 }

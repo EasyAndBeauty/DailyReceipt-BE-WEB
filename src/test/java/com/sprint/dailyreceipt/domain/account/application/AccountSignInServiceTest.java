@@ -3,6 +3,7 @@ package com.sprint.dailyreceipt.domain.account.application;
 import com.sprint.dailyreceipt.domain.account.entity.Account;
 import com.sprint.dailyreceipt.domain.account.dao.AccountRepository;
 import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
+import com.sprint.dailyreceipt.domain.token.entity.Token;
 import com.sprint.dailyreceipt.global.jwt.application.JwtCreateService;
 import com.sprint.dailyreceipt.support.AbstractIntegrationTest;
 import com.sprint.dailyreceipt.infra.kakao.model.KakaoProfileResponse;
@@ -31,21 +32,15 @@ class AccountSignInServiceTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("signIn() : 기존에 unique ID가 존재할 경우, 성공적으로 로그인 할 수 있다")
-    @Disabled("수정 예정")
     void test_signIn_notFirstAccount() throws Exception {
-//        //given
-//        KakaoProfileResponse kakaoProfileResponse = new KakaoProfileResponse("unique1");
-//        Account savedAccount = accountRepository.findAccountByUniqueId("unique1").get();
-//        String savedRefreshToken = savedAccount.getToken().getRefreshToken();
-//
-//        //when
-//        TokenResponse tokenResponse = accountSignInService.signIn(kakaoProfileResponse);
-//        Account account = accountRepository.findAccountByUniqueId("unique1").get();
-//        String refreshToken = account.getToken().getRefreshToken();
-//
-//        //then
-//        assertFalse(tokenResponse.isFirst());
-//        assertThat(savedRefreshToken).isNotEqualTo(refreshToken);
+        //given
+        KakaoProfileResponse kakaoProfileResponse = new KakaoProfileResponse("unique1");
+
+        //when
+        TokenResponse tokenResponse = accountSignInService.signIn(kakaoProfileResponse);
+
+        //then
+        assertFalse(tokenResponse.isFirst());
     }
 
     @Test

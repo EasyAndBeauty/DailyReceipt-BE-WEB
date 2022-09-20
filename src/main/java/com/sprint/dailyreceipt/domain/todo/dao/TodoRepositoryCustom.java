@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface TodoRepositoryCustom {
 
-
-    List<Todo> findTodoBySocialId(String accountSocialId);
+    List<Todo> findTodosByAccountId(long accountId);
 }

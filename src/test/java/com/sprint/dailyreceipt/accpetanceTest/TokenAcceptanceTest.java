@@ -7,7 +7,6 @@ import com.sprint.dailyreceipt.domain.token.api.model.TokenResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,10 +14,8 @@ import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("Token Acceptance Test")
 public class TokenAcceptanceTest extends AbstractAcceptanceTest {
-
-    @Autowired
-    TestRestTemplate restTemplate;
 
     @Autowired
     TokenRepository tokenRepository;
@@ -36,7 +33,7 @@ public class TokenAcceptanceTest extends AbstractAcceptanceTest {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         //when
-        ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
+        ResponseEntity<TokenResponse> response = template().postForEntity(
                 "/api/v1/tokens/re-issuance", request, TokenResponse.class);
 
         //then

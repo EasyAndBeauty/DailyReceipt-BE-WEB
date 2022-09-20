@@ -65,4 +65,8 @@ public class Account {
     public void addToken(Token token) {
         this.token = token;
     }
+
+    public boolean isNotSame(Account account) {
+        return !this.id.equals(account.getId());
+    }
 }
