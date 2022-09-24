@@ -12,7 +12,11 @@ import com.sprint.dailyreceipt.domain.todo.application.TodoUpdateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -24,14 +28,22 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.snippet.Attributes.attributes;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("TodoApi Unit Test")
+@ExtendWith(RestDocumentationExtension.class)
 class TodoApiTest {
 
     private MockMvc mockMvc;
@@ -47,7 +59,7 @@ class TodoApiTest {
     private TodoRemoveService todoRemoveService;
 
     @BeforeEach
-    public void init() {
+    public void init(RestDocumentationContextProvider restDocumentation) {
         todoCreateService = mock(TodoCreateService.class);
         todoProfileService = mock(TodoProfileService.class);
         todoUpdateService = mock(TodoUpdateService.class);
@@ -58,7 +70,14 @@ class TodoApiTest {
 
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        mockMvc = MockMvcBuilders.standaloneSetup(todoApi).build();
+
+        mockMvc = MockMvcBuilders.standaloneSetup(todoApi)
+                                 .apply(documentationConfiguration(restDocumentation)
+                                                .operationPreprocessors()
+                                                .withResponseDefaults(prettyPrint())
+                                                .withRequestDefaults(prettyPrint()))
+                                 .build();
+
     }
 
     @Test
@@ -83,7 +102,14 @@ class TodoApiTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestData))
                .andExpect(status().isCreated())
-               .andDo(print());
+               .andDo(document("post-todo",
+                               requestFields(
+                                       attributes(key("title").value("/api/v1/todo")),
+                                       fieldWithPath("task").description("todo 이름"),
+                                       fieldWithPath("timer").description("todo 시간"),
+                                       fieldWithPath("isDone").description("todo 완료 여부"),
+                                       fieldWithPath("date").description("todo 작성 날짜")
+                               )));
     }
 
     @Test
@@ -117,13 +143,16 @@ class TodoApiTest {
                 .thenReturn(todoList);
 
         //then
-        mockMvc.perform(get("/api/v1/todo"))
-               .andExpect(status().isOk())
-               .andDo(print());
 
-        mockMvc.perform(get("/api/v1/todo?targetDate=" + targetDate))
+        mockMvc.perform(get("/api/v1/todo")
+                                .param("targetDate", targetDate))
                .andExpect(status().isOk())
-               .andDo(print());
+               .andDo(document("get-todo",
+                               requestParameters(
+                                       attributes(key("title").value("/api/v1/todo?targetDate")),
+                                       parameterWithName("targetDate").description("조회할 Todo 날짜").optional()
+                               )));
+
     }
 
     @Test
@@ -152,11 +181,21 @@ class TodoApiTest {
                 .thenReturn(todoInfoResponse);
 
         //then
-        mockMvc.perform(put("/api/v1/todo/1")
-                                .content(requestData)
-                                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/todo/{todo-id}", 1L)
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(requestData))
                .andExpect(status().isOk())
-               .andDo(print());
+               .andDo(document("put-todo",
+                               pathParameters(
+                                       parameterWithName("todo-id").description("todo 식별 값")
+                               ),
+                               requestFields(
+                                       attributes(key("title").value("/api/v1/todo/{todo-id}")),
+                                       fieldWithPath("task").description("todo 이름"),
+                                       fieldWithPath("timer").description("todo 시간"),
+                                       fieldWithPath("isDone").description("todo 완료 여부"),
+                                       fieldWithPath("date").description("todo 작성 날짜")
+                               )));
     }
 
     @Test
@@ -167,8 +206,12 @@ class TodoApiTest {
         doNothing().when(todoRemoveService).deleteTodo(any(), anyLong());
 
         //then
-        mockMvc.perform(delete("/api/v1/todo/1"))
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/v1/todo/{todo-id}", 1L))
                .andExpect(status().isOk())
-               .andDo(print());
+               .andDo(document("delete-todo",
+                               pathParameters(
+                                       parameterWithName("todo-id").description("todo 식별 값")
+                               )
+               ));
     }
 }

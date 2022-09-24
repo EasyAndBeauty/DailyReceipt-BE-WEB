@@ -42,6 +42,6 @@ public class ReceiptConstants {
 
     //White List
     public static final String[] whiteList =
-            {"/auth/kakao/callback", "/test"};
+            {"/auth/kakao/callback", "/test", "/docs/index.html"};
 
 }
