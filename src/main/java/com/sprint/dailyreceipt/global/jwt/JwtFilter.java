@@ -10,6 +10,7 @@ import com.sprint.dailyreceipt.global.jwt.exception.InvalidJwtTokenException;
 import com.sprint.dailyreceipt.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 
@@ -47,7 +48,7 @@ public class JwtFilter implements Filter {
         String jwt = JwtUtil.resolveToken(httpRequest);
 
         try {
-            if(isLoginCheckPath(requestURI)) {
+            if(isLoginCheckPath(requestURI) && !httpRequest.getMethod().equals(HttpMethod.OPTIONS.name())) {
                 jwtSupport.validateToken(jwt);
             }
         } catch (InvalidJwtTokenException | ExpiredJwtTokenException exception) {
