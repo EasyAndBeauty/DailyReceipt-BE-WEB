@@ -1,10 +1,15 @@
 package com.sprint.dailyreceipt.domain.account.api;
 
-import com.sprint.dailyreceipt.domain.account.application.AccountSignInService;
+import com.sprint.dailyreceipt.domain.account.api.model.AccountUpdateRequest;
+import com.sprint.dailyreceipt.domain.account.application.AccountProfileService;
 import com.sprint.dailyreceipt.domain.account.api.model.AccountInfoResponse;
+import com.sprint.dailyreceipt.domain.account.application.AccountUpdateService;
+import com.sprint.dailyreceipt.domain.account.entity.Account;
+import com.sprint.dailyreceipt.global.annotation.Login;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,10 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AccountApi {
 
-    private final AccountSignInService accountSignInService;
+    private final AccountProfileService accountProfileService;
 
-    @GetMapping("/v1/user/{user-id}")
-    public AccountInfoResponse searchUserInfo(@PathVariable("user-id") String socialId) {
-        return null;
+    private final AccountUpdateService accountUpdateService;
+
+    @GetMapping("/v1/user")
+    public AccountInfoResponse searchUserInfo(@Login Account account) {
+        return accountProfileService.findAccountInfo(account);
+    }
+
+    @PutMapping("/v1/user")
+    public AccountInfoResponse updateAccount(@Login Account account, @RequestBody AccountUpdateRequest accountUpdateRequest) {
+        return accountUpdateService.update(account, accountUpdateRequest);
     }
 }

@@ -39,12 +39,9 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<Todo> todos = new ArrayList<>();
 
-    public Account(Long id) {
-        this.id = id;
-    }
-
     @Builder
-    public Account(String nickname, Token token) {
+    public Account(Long id, String nickname, Token token) {
+        this.id = id;
         this.nickname = nickname;
         this.token = token;
     }
@@ -68,5 +65,9 @@ public class Account {
 
     public boolean isNotSame(Account account) {
         return !this.id.equals(account.getId());
+    }
+
+    public void update(Account account) {
+        this.nickname = account.getNickname();
     }
 }
