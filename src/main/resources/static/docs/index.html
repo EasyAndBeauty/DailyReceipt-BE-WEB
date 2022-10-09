@@ -453,6 +453,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#Todo-삭제">Delete Todo</a></li>
 </ul>
 </li>
+<li><a href="#Account-API">Account API</a>
+<ul class="sectlevel2">
+<li><a href="#Account-조회">Get Account</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -514,7 +519,7 @@ Host: localhost:8080
 {
   "task" : "TDD 공부",
   "timer" : "05:07",
-  "date" : "2022-09-25",
+  "date" : "2022-10-09",
   "isDone" : true
 }</code></pre>
 </div>
@@ -607,7 +612,7 @@ Host: localhost:8080
 {
   "task" : "TDD 공부",
   "timer" : "14:24",
-  "date" : "2022-09-25",
+  "date" : "2022-10-09",
   "isDone" : true
 }</code></pre>
 </div>
@@ -693,7 +698,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "task" : "TDD 공부",
-  "date" : "2022-09-25",
+  "date" : "2022-10-09",
   "timer" : "14:24",
   "todoId" : 1,
   "isDone" : true
@@ -738,11 +743,50 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="Account-API">Account API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Account-조회">Get Account</h3>
+<div class="sect3">
+<h4 id="Account-조회_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/user HTTP/1.1
+Authorization: Token
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Account-조회_request_headers">Request headers</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-09-23 19:53:12 +0900
+Last updated 2022-10-09 22:21:30 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -1,6 +1,5 @@
 package com.sprint.dailyreceipt.domain.account.api.model;
 
-import com.sprint.dailyreceipt.domain.account.entity.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,11 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AccountInfoResponse {
+public class AccountUpdateRequest {
 
     private String nickname;
 
-    public AccountInfoResponse(Account account) {
-        this.nickname = account.getNickname();
+    public AccountUpdateRequest(String nickname) {
+        this.nickname = nickname;
     }
 }

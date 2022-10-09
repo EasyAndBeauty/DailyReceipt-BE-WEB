@@ -27,3 +27,16 @@ operation::put-todo[snippets='http-request,request-fields,path-parameters,respon
 === Delete Todo
 
 operation::delete-todo[snippets='http-request,path-parameters']
+
+[[Account-API]]
+== Account API
+
+[[Account-조회]]
+=== Get Account
+
+operation::get-account[snippets='http-request,request-headers']
+
+[[Account-수정]]
+=== Put Account
+
+operation::put-account[snippets='http-request,request-fields,request-headers']
