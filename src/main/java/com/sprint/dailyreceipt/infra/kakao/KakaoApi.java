@@ -37,7 +37,7 @@ public class KakaoApi {
     @GetMapping("/auth/kakao/callback")
     public TokenResponse callbackOfKakao(@RequestParam String code){
         KakaoTokenResponse kakaoTokenResponse = kakaoTokenClient.requestKakaoToken(KAKAO_CONTENT_TYPE, GRANT_TYPE,
-                                                                                   clientId, LOCAL_REDIRECT_URI,
+                                                                                   clientId, redirectUri,
                                                                                    code, clientSecret);
 
         KakaoProfileResponse kakaoProfileResponse = kakaoAccountInfoClient.getAccessTokenForUserInfo(
