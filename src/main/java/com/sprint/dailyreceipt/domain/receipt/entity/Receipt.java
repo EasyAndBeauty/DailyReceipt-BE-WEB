@@ -56,4 +56,8 @@ public class Receipt extends BaseEntity {
         this.name = name;
         this.account = account;
     }
+
+    public void unpin() {
+        this.pinned = false;
+    }
 }

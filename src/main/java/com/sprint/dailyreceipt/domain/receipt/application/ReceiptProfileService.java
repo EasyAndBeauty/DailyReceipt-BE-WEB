@@ -22,7 +22,8 @@ public class ReceiptProfileService {
                          .filter(Receipt::isPinned)
                          .map(receipt -> ReceiptInfoResponse.of(receipt.getTodoIds(),
                                                                 receipt.getFamousSaying(),
-                                                                receipt.getName()))
+                                                                receipt.getName(),
+                                                                receipt.getId()))
                          .collect(Collectors.toList());
     }
 }

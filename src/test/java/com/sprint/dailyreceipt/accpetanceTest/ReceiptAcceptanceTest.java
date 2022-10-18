@@ -54,4 +54,18 @@ public class ReceiptAcceptanceTest extends AbstractAcceptanceTest {
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
+    @Test
+    @DisplayName("PUT /api/v1/receipt : Receipt 수정 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    void testPutModifyReceiptStatusOK() throws Exception {
+        //given
+        HttpEntity httpEntity = createHttpEntity();
+
+        //when
+        ResponseEntity<Void> response = template().exchange("/api/v1/receipt/1",
+                                                            HttpMethod.PUT, httpEntity, Void.class);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

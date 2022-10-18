@@ -1,8 +1,8 @@
 package com.sprint.dailyreceipt.domain.receipt.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptInfoResponse;
 import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptRegisterRequest;
+import com.sprint.dailyreceipt.domain.receipt.application.ReceiptModifyService;
 import com.sprint.dailyreceipt.domain.receipt.application.ReceiptProfileService;
 import com.sprint.dailyreceipt.domain.receipt.application.ReceiptRegisterService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -30,6 +31,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
@@ -47,16 +49,19 @@ class ReceiptApiTest {
 
     private ReceiptProfileService receiptProfileService;
 
+    private ReceiptModifyService receiptModifyService;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void init(RestDocumentationContextProvider restDocumentation) {
         receiptRegisterService = mock(ReceiptRegisterService.class);
         receiptProfileService = mock(ReceiptProfileService.class);
+        receiptModifyService = mock(ReceiptModifyService.class);
 
         objectMapper = new ObjectMapper();
 
-        ReceiptApi receiptApi = new ReceiptApi(receiptRegisterService, receiptProfileService);
+        ReceiptApi receiptApi = new ReceiptApi(receiptRegisterService, receiptProfileService, receiptModifyService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(receiptApi)
                                  .apply(documentationConfiguration(restDocumentation)
@@ -113,6 +118,18 @@ class ReceiptApiTest {
                                requestHeaders(
                                        headerWithName(HttpHeaders.AUTHORIZATION).description("JWT")
                                )));
+    }
 
+    @Test
+    @DisplayName("modifyReceipt() : 사용자는 정상적으로 Receipt 수정 요청을 보낼 수 있다.")
+    void testModifyReceipt() throws Exception {
+        //when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/receipt/{receipt-id}", 1L)
+                                                        .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andDo(document("put-receipt",
+                               pathParameters(
+                                       parameterWithName("receipt-id").description("receipt 식별 값")
+                               )));
     }
 }

@@ -20,3 +20,12 @@ values (1, '2021-08-27 09:00:00', '2021-08-27 09:00:00', 1, 'TDD 공부', '250',
 
 insert into todo (todo_id, created_at, updated_at, is_done, task, timer, account_id, date)
 values (2, '2021-08-27 09:00:00', '2021-08-27 09:00:00', 1, 'ATDD 공부', '270', 1, '2022-04-15');
+
+insert into receipt (receipt_id, pinned, famous_saying, name, created_at, updated_at, account_id)
+values (1, false, 'aa', 'aa', '2021-08-27 09:00:00', '2021-08-27 09:00:00', 1);
+
+insert into receipt_todos (receipt_id, todo_ids)
+values (1, 1);
+
+insert into receipt_todos (receipt_id, todo_ids)
+values (1, 2);
