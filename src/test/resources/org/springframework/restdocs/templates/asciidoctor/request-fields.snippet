@@ -1,0 +1,14 @@
+.{{title}}
+|===
+|Path|Type|Description|Constraints|필수 값 여부
+
+{{#fields}}
+|{{path}}
+|{{type}}
+|{{description}}
+|{{#constraints}}{{/constraints}}
+|{{^optional}}true{{/optional}}
+{{#optional}}false{{/optional}}
+
+{{/fields}}
+|===
