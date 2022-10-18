@@ -48,3 +48,7 @@ operation::put-account[snippets='http-request,request-fields,request-headers']
 === Post Receipt
 
 operation::post-receipt[snippets='http-request,request-fields,http-response,response-body']
+
+[[Receipt-조회]]
+=== Get Receipt
+operation::get-receipt[snippets='http-request,request-headers']

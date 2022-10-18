@@ -1,11 +1,13 @@
 package com.sprint.dailyreceipt.accpetanceTest;
 
+import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptInfoResponse;
 import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptRegisterRequest;
 import com.sprint.dailyreceipt.support.AbstractAcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,7 +24,7 @@ public class ReceiptAcceptanceTest extends AbstractAcceptanceTest {
     void testPostCreateReceiptStatusCreated() throws Exception {
         //given
         ReceiptRegisterRequest request = ReceiptRegisterRequest.builder()
-                                                               .todoIds(List.of(1, 2, 3))
+                                                               .todoIds(List.of(1, 2))
                                                                .pinned(true)
                                                                .famousSaying("say")
                                                                .name("name1")
@@ -35,5 +37,21 @@ public class ReceiptAcceptanceTest extends AbstractAcceptanceTest {
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/receipt : Receipt 조회 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    void testGetSearchReceiptStatusOK() throws Exception {
+        //given
+        HttpEntity httpEntity = createHttpEntity();
+
+        //when
+        ResponseEntity<List<ReceiptInfoResponse>> response = template().exchange("/api/v1/receipt",
+                                                                              HttpMethod.GET, httpEntity,
+                                                                              new ParameterizedTypeReference<List<ReceiptInfoResponse>>() {
+                                                                              });
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

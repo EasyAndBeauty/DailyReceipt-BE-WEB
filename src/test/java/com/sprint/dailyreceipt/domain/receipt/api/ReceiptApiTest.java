@@ -1,12 +1,15 @@
 package com.sprint.dailyreceipt.domain.receipt.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptInfoResponse;
 import com.sprint.dailyreceipt.domain.receipt.api.model.ReceiptRegisterRequest;
+import com.sprint.dailyreceipt.domain.receipt.application.ReceiptProfileService;
 import com.sprint.dailyreceipt.domain.receipt.application.ReceiptRegisterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -16,15 +19,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,15 +45,18 @@ class ReceiptApiTest {
 
     private ReceiptRegisterService receiptRegisterService;
 
+    private ReceiptProfileService receiptProfileService;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void init(RestDocumentationContextProvider restDocumentation) {
         receiptRegisterService = mock(ReceiptRegisterService.class);
+        receiptProfileService = mock(ReceiptProfileService.class);
 
         objectMapper = new ObjectMapper();
 
-        ReceiptApi receiptApi = new ReceiptApi(receiptRegisterService);
+        ReceiptApi receiptApi = new ReceiptApi(receiptRegisterService, receiptProfileService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(receiptApi)
                                  .apply(documentationConfiguration(restDocumentation)
@@ -84,5 +96,23 @@ class ReceiptApiTest {
                                        fieldWithPath("famousSaying").description("명언"),
                                        fieldWithPath("name").description("영수증에 저장된 유저 이름")
                                )));
+    }
+
+    @Test
+    @DisplayName("searchReceipt() : 사용자는 정상적으로 Receipt 조회 요청을 보낼 수 있다")
+    void testSearchReceipt() throws Exception {
+        //then
+        mockMvc.perform(get("/api/v1/receipt")
+                                .header(HttpHeaders.AUTHORIZATION, "Token"))
+               .andExpect(status().isOk())
+               .andDo(document("get-receipt",
+                               requestParameters(
+                                       attributes(key("title").value("/api/v1/receipt"))
+
+                               ),
+                               requestHeaders(
+                                       headerWithName(HttpHeaders.AUTHORIZATION).description("JWT")
+                               )));
+
     }
 }
