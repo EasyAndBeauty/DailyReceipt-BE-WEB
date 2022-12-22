@@ -32,12 +32,12 @@ public class ReceiptApi {
     private final ReceiptModifyService receiptModifyService;
 
 
-    @PostMapping("/v1/receipt")
+    @PostMapping("/v1/receipt/pinned")
     public ResponseEntity<Long> registerReceipt(@Login Account account, @RequestBody ReceiptRegisterRequest registerRequest) {
         return new ResponseEntity<>(receiptRegisterService.register(account, registerRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping("/v1/receipt")
+    @GetMapping("/v1/receipt/pinned")
     public List<ReceiptInfoResponse> searchReceipt(@Login Account account) {
         return receiptProfileService.findReceiptList(account);
     }

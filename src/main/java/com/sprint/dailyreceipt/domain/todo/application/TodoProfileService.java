@@ -19,7 +19,7 @@ public class TodoProfileService {
 
     public List<TodoInfoResponse> findTodoList(Account account, String targetDate) {
         Stream<Todo> todoListStream = todoDao.findTodosByAccountId(account.getId())
-                                     .stream();
+                                             .stream();
 
         if (targetDate != null) {
             todoListStream = todoListStream.filter(todo -> todo.getDate().toString().equals(targetDate));
@@ -33,5 +33,18 @@ public class TodoProfileService {
                                                           .todoId(todo.getId())
                                                           .build())
                              .collect(Collectors.toList());
+    }
+
+    public List<TodoInfoResponse> findTodoListByTodoIds(List<Long> todoIds) {
+        return todoDao.findTodosByTodoIds(todoIds)
+                      .stream()
+                      .map(todo -> TodoInfoResponse.builder()
+                                                   .task(todo.getTask())
+                                                   .date(todo.getDate().toString())
+                                                   .isDone(todo.isDone())
+                                                   .timer(todo.getTimer())
+                                                   .todoId(todo.getId())
+                                                   .build())
+                      .collect(Collectors.toList());
     }
 }

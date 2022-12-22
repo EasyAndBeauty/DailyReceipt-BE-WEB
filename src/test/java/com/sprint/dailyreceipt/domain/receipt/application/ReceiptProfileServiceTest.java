@@ -3,6 +3,7 @@ package com.sprint.dailyreceipt.domain.receipt.application;
 import com.sprint.dailyreceipt.domain.account.entity.Account;
 import com.sprint.dailyreceipt.domain.receipt.dao.ReceiptDao;
 import com.sprint.dailyreceipt.domain.receipt.entity.Receipt;
+import com.sprint.dailyreceipt.domain.todo.application.TodoProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,14 @@ class ReceiptProfileServiceTest {
 
     ReceiptProfileService receiptProfileService;
 
+    TodoProfileService todoProfileService;
+
     @BeforeEach
     void init() {
         receiptDao = mock(ReceiptDao.class);
+        todoProfileService = mock(TodoProfileService.class);
 
-        receiptProfileService = new ReceiptProfileService(receiptDao);
+        receiptProfileService = new ReceiptProfileService(receiptDao, todoProfileService);
     }
 
     @Test

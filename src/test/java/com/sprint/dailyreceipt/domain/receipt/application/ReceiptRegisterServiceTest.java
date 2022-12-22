@@ -39,7 +39,7 @@ class ReceiptRegisterServiceTest {
                                  .build();
 
         ReceiptRegisterRequest request = ReceiptRegisterRequest.builder()
-                                                               .todoIds(List.of(1, 2, 3))
+                                                               .todoIds(List.of(1L, 2L, 3L))
                                                                .pinned(true)
                                                                .famousSaying("say")
                                                                .name("name1")

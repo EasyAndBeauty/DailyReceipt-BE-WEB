@@ -1,5 +1,6 @@
 package com.sprint.dailyreceipt.domain.receipt.api.model;
 
+import com.sprint.dailyreceipt.domain.todo.api.model.TodoInfoResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReceiptInfoResponse {
 
-    private List<Integer> todoIds;
+    private List<TodoInfoResponse> todos;
 
     private String famousSaying;
 
@@ -19,14 +20,14 @@ public class ReceiptInfoResponse {
 
     private long id;
 
-    public ReceiptInfoResponse(List<Integer> todoIds, String famousSaying, String name, long id) {
-        this.todoIds = todoIds;
+    public ReceiptInfoResponse(List<TodoInfoResponse> todos, String famousSaying, String name, long id) {
+        this.todos = todos;
         this.famousSaying = famousSaying;
         this.name = name;
         this.id = id;
     }
 
-    public static ReceiptInfoResponse of(List<Integer> todoIds, String famousSaying, String name, long id) {
-        return new ReceiptInfoResponse(todoIds, famousSaying, name, id);
+    public static ReceiptInfoResponse of(List<TodoInfoResponse> todos, String famousSaying, String name, long id) {
+        return new ReceiptInfoResponse(todos, famousSaying, name, id);
     }
 }

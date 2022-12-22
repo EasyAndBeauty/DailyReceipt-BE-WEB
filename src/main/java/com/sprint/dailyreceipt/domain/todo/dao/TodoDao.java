@@ -21,4 +21,8 @@ public class TodoDao {
         return todoRepository.findById(todoId)
                              .orElseThrow(EntityNotFoundException::new);
     }
+
+    public List<Todo> findTodosByTodoIds(List<Long> todoIds) {
+        return todoRepository.findAllById(todoIds);
+    }
 }

@@ -20,11 +20,11 @@ public class ReceiptAcceptanceTest extends AbstractAcceptanceTest {
 
 
     @Test
-    @DisplayName("POST /api/v1/receipt : Receipt 생성 요청이 정상적으로 수행될 경우, Created(201)이 반환된다")
+    @DisplayName("POST /api/v1/receipt/pinned : Receipt 생성 요청이 정상적으로 수행될 경우, Created(201)이 반환된다")
     void testPostCreateReceiptStatusCreated() throws Exception {
         //given
         ReceiptRegisterRequest request = ReceiptRegisterRequest.builder()
-                                                               .todoIds(List.of(1, 2))
+                                                               .todoIds(List.of(1L, 2L))
                                                                .pinned(true)
                                                                .famousSaying("say")
                                                                .name("name1")
@@ -33,20 +33,20 @@ public class ReceiptAcceptanceTest extends AbstractAcceptanceTest {
         HttpEntity httpEntity = createHttpEntity(request);
 
         //when
-        ResponseEntity<Long> response = template().postForEntity("/api/v1/receipt", httpEntity, Long.class);
+        ResponseEntity<Long> response = template().postForEntity("/api/v1/receipt/pinned", httpEntity, Long.class);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    @DisplayName("GET /api/v1/receipt : Receipt 조회 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
+    @DisplayName("GET /api/v1/receipt/pinned : Receipt 조회 요청이 정상적으로 수행될 경우, OK(200)이 반환된다")
     void testGetSearchReceiptStatusOK() throws Exception {
         //given
         HttpEntity httpEntity = createHttpEntity();
 
         //when
-        ResponseEntity<List<ReceiptInfoResponse>> response = template().exchange("/api/v1/receipt",
+        ResponseEntity<List<ReceiptInfoResponse>> response = template().exchange("/api/v1/receipt/pinned",
                                                                               HttpMethod.GET, httpEntity,
                                                                               new ParameterizedTypeReference<List<ReceiptInfoResponse>>() {
                                                                               });

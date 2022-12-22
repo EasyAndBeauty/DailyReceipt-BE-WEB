@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReceiptRegisterRequest {
 
-    private List<Integer> todoIds;
+    private List<Long> todoIds;
 
     private boolean pinned;
 
@@ -21,7 +21,7 @@ public class ReceiptRegisterRequest {
     private String name;
 
     @Builder
-    public ReceiptRegisterRequest(List<Integer> todoIds, boolean pinned, String famousSaying, String name) {
+    public ReceiptRegisterRequest(List<Long> todoIds, boolean pinned, String famousSaying, String name) {
         this.todoIds = todoIds;
         this.pinned = pinned;
         this.famousSaying = famousSaying;

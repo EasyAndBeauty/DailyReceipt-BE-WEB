@@ -76,7 +76,7 @@ class ReceiptApiTest {
     void testMakeReceipt() throws Exception {
         //given
         ReceiptRegisterRequest request = ReceiptRegisterRequest.builder()
-                                                               .todoIds(List.of(1, 2, 3))
+                                                               .todoIds(List.of(1L, 2L, 3L))
                                                                .pinned(true)
                                                                .famousSaying("say")
                                                                .name("name1")
@@ -89,13 +89,13 @@ class ReceiptApiTest {
         when(receiptRegisterService.register(any(), any()))
                 .thenReturn(1L);
 
-        mockMvc.perform(post("/api/v1/receipt")
+        mockMvc.perform(post("/api/v1/receipt/pinned")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestData))
                .andExpect(status().isCreated())
                .andDo(document("post-receipt",
                                requestFields(
-                                       attributes(key("title").value("/api/v1/receipt")),
+                                       attributes(key("title").value("/api/v1/receipt/pinned")),
                                        fieldWithPath("todoIds").description("영수증에 저장될 todo Id들"),
                                        fieldWithPath("pinned").description("핀 여부"),
                                        fieldWithPath("famousSaying").description("명언"),
@@ -107,13 +107,12 @@ class ReceiptApiTest {
     @DisplayName("searchReceipt() : 사용자는 정상적으로 Receipt 조회 요청을 보낼 수 있다")
     void testSearchReceipt() throws Exception {
         //then
-        mockMvc.perform(get("/api/v1/receipt")
+        mockMvc.perform(get("/api/v1/receipt/pinned")
                                 .header(HttpHeaders.AUTHORIZATION, "Token"))
                .andExpect(status().isOk())
                .andDo(document("get-receipt",
                                requestParameters(
-                                       attributes(key("title").value("/api/v1/receipt"))
-
+                                       attributes(key("title").value("/api/v1/receipt/pinned"))
                                ),
                                requestHeaders(
                                        headerWithName(HttpHeaders.AUTHORIZATION).description("JWT")

@@ -33,7 +33,7 @@ public class Receipt extends BaseEntity {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "receipt_todos", joinColumns = @JoinColumn(name = "receipt_id"))
-    private List<Integer> todoIds = new ArrayList<>();
+    private List<Long> todoIds = new ArrayList<>();
 
     private boolean pinned;
 
@@ -46,7 +46,7 @@ public class Receipt extends BaseEntity {
     private Account account;
 
     @Builder
-    public Receipt(ZonedDateTime createdAt, ZonedDateTime updatedAt, Long id, List<Integer> todoIds,
+    public Receipt(ZonedDateTime createdAt, ZonedDateTime updatedAt, Long id, List<Long> todoIds,
                    boolean pinned, String famousSaying, String name, Account account) {
         super(createdAt, updatedAt);
         this.id = id;
