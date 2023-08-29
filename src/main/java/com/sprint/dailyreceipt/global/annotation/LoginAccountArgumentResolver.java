@@ -1,12 +1,11 @@
 package com.sprint.dailyreceipt.global.annotation;
 
+import static com.sprint.dailyreceipt.global.ReceiptConstants.AUTHORIZATION_HEADER;
+
+import com.sprint.dailyreceipt.domain.account.dao.AccountRepository;
 import com.sprint.dailyreceipt.domain.account.entity.Account;
-import com.sprint.dailyreceipt.domain.token.entity.Token;
-import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
-import com.sprint.dailyreceipt.global.jwt.application.JwtParseService;
-import com.sprint.dailyreceipt.global.jwt.exception.NotHaveTokenException;
-import com.sprint.dailyreceipt.global.jwt.application.JwtCreateService;
-import com.sprint.dailyreceipt.global.utils.JwtUtil;
+import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -16,39 +15,38 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class LoginAccountArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final TokenRepository tokenRepository;
+//    private final TokenRepository tokenRepository;
+//    private final JwtParseService jwtParseService;
 
-    private final JwtParseService jwtParseService;
+  private final AccountRepository accountRepository;
 
-    @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+  @Override
+  public boolean supportsParameter(MethodParameter parameter) {
 
-        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
+    boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
 
-        boolean isAccountType = Account.class.isAssignableFrom(parameter.getParameterType());
+    boolean isAccountType = Account.class.isAssignableFrom(parameter.getParameterType());
 
-        return hasLoginAnnotation && isAccountType;
-    }
+    return hasLoginAnnotation && isAccountType;
+  }
 
-    @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+  @Override
+  public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+      NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+    HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
-        String jwt = JwtUtil.resolveToken(request);
-        String subject = jwtParseService.getSubject(jwt);
+//        String jwt = JwtUtil.resolveToken(request);
+//        String subject = jwtParseService.getSubject(jwt);
 
-        Token token = tokenRepository.findByUniqueIdBySocial(subject)
-                                     .orElseThrow(NotHaveTokenException::new);
+    final long memberId = Long.parseLong(request.getHeader(AUTHORIZATION_HEADER));
 
-        return token.getAccount();
-    }
+    return accountRepository.findById(memberId)
+        .orElseThrow(AccountNotFoundException::new);
+  }
 }
