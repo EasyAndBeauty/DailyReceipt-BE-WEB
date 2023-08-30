@@ -2,8 +2,6 @@ package com.sprint.dailyreceipt.support;
 
 import com.sprint.dailyreceipt.domain.account.dao.AccountRepository;
 import com.sprint.dailyreceipt.domain.account.entity.Account;
-import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
-import com.sprint.dailyreceipt.domain.token.entity.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,15 +18,8 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private TokenRepository tokenRepository;
-
     protected Account defaultAccount() {
         return testAccount(1L);
-    }
-
-    protected Token testToken() {
-        return tokenRepository.findById(1L).get();
     }
 
     protected Account testAccount(long accountId) {

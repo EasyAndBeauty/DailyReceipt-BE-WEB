@@ -2,8 +2,6 @@ package com.sprint.dailyreceipt.support;
 
 import com.sprint.dailyreceipt.domain.account.dao.AccountRepository;
 import com.sprint.dailyreceipt.domain.account.entity.Account;
-import com.sprint.dailyreceipt.domain.token.dao.TokenRepository;
-import com.sprint.dailyreceipt.domain.token.entity.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -25,9 +23,6 @@ public abstract class AbstractAcceptanceTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private TokenRepository tokenRepository;
-
     public TestRestTemplate template() {
         return restTemplate;
     }
@@ -36,14 +31,11 @@ public abstract class AbstractAcceptanceTest {
         return accountRepository.findById(1L).get();
     }
 
-    protected Token testToken() {
-        return tokenRepository.findById(1L).get();
-    }
-
     protected HttpEntity createHttpEntity(Object body) {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setBearerAuth(testToken().getRefreshToken());
+//        headers.setBearerAuth(testToken().getRefreshToken());
+        headers.set(HttpHeaders.AUTHORIZATION, "1");
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity(body, headers);
     }
@@ -51,7 +43,7 @@ public abstract class AbstractAcceptanceTest {
     protected HttpEntity createHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setBearerAuth(testToken().getRefreshToken());
+        headers.set(HttpHeaders.AUTHORIZATION, "1");
 
         return new HttpEntity(headers);
     }
