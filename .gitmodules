@@ -1,0 +1,3 @@
+[submodule "src/main/resources/daily-receipt-submodule"]
+	path = src/main/resources/daily-receipt-submodule
+	url = https://github.com/java-saeng/daily-receipt-submodule.git
