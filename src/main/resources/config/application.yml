@@ -13,3 +13,10 @@ spring:
         show_sql: true
         use_sql_comments: true
 
+---
+
+spring:
+  config:
+    import: classpath:daily-receipt-submodule/application-dev.yml
+    activate:
+      on-profile: dev
