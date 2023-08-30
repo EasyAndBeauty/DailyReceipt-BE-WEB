@@ -75,5 +75,5 @@ jobs:
     steps:
       - name: Docker run
         run: |
-            sudo docker stop receipt-dev && docker rm receipt-dev && docker rmi ${{ secrets.DOCKER_TAG }}
+            sudo docker stop receipt-dev && sudo docker rm receipt-dev && sudo docker rmi ${{ secrets.DOCKER_TAG }}
             sudo docker run -d -p 8080:8080 --name receipt-dev ${{ secrets.DOCKER_TAG }}
